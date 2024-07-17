@@ -1,0 +1,489 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "Montserrat", sans-serif;
+    color: var(--blackColor);
+}
+
+:root {
+    --primaryColor: #49cb5c;
+    --hoverColor: #baeb6c;
+    --whiteColor: #f2f2f2;
+    --blackColor: #3d3d3d;
+    --greyColor: #c9c9c9;
+    --widthHeaderBut: 11rem;
+}
+
+.flex {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+a {
+    text-decoration: none;
+}
+a:hover {
+    color: var(--primaryColor);
+}
+
+p {
+    font-size: 1rem;
+}
+
+.logo {
+    width: 3.5rem;
+}
+
+.icon {
+    font-size: 1.5rem;
+}
+
+html {
+    font-size: 13px;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+}
+
+.btn {
+    border-radius: 2rem;
+    background-color: #49cb5c;
+    padding: .8rem 1.6rem;
+    font-size: .9rem;
+    font-weight: bold;
+    color: var(--whiteColor);
+    border: 1px solid var(--whiteColor);
+    text-align: center;
+} 
+.btn:hover {
+    background-color: var(--hoverColor);
+    transition: 1s ease;
+}
+
+input {
+    border: none;
+    background-color: transparent;
+    outline: none;
+    padding: .6rem 0;
+    width: 100%;
+} 
+
+.showMessage {
+    text-align: center;
+    padding: 1rem 2rem;
+    background-color: red;
+    border-radius: 1rem;
+    color: var(--whiteColor);
+    font-weight: bold;
+}
+.hiddenMessage {
+    display: none;
+}
+
+.principal {
+    gap: 0;
+    flex-direction: column;
+    height: 100vh;
+
+    header {
+        z-index: 1;
+        top: 0;
+        position: fixed;
+        background-color: #49cb5c;
+        justify-content: space-around;
+        width: 100%;
+        height: 10vh;
+        padding: 0 2rem;
+
+        h1 {
+            color: var(--whiteColor);
+        }
+
+        form {
+           border-radius: 2rem;
+           background-color: var(--whiteColor);
+           gap: 0;
+           overflow: hidden;
+           border: 1px solid var(--whiteColor);
+           
+           input {
+            padding: 0;
+            padding-left: 1rem;
+            width: 30vw;
+           }
+
+           button {
+            background-color: var(--primaryColor);
+            padding: .6rem 1rem;
+           }
+           button:hover {
+            background-color: var(--hoverColor);
+           }
+               
+        }
+
+        .btnLogin {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: var(--widthHeaderBut);
+        }
+
+        .optionsUser {
+            top: 70%;
+            position: absolute;
+            align-items: flex-start;
+            flex-direction: column;
+            background-color: var(--whiteColor);
+            padding: 2rem;
+            gap: 2rem;
+            border-radius: 1rem;
+            box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            width: var(--widthHeaderBut);
+
+            * {
+                font-weight: bold;
+                font-size: 1rem;
+            }
+        }
+    }
+
+    footer {
+        position: relative;
+        bottom: 0;
+        background-color: var(--primaryColor);
+        width: 100%;
+        padding: 2rem;
+        flex-direction: column;
+        align-items: flex-start;
+        
+        * {
+            color: var(--whiteColor);
+        }
+
+    }
+}
+
+.home {
+    background-color: var(--whiteColor);
+    padding-top: 20vh;
+    gap: 4rem;
+    text-align: center;
+    flex-direction: column;
+    padding-bottom: 10vh;
+    width: 100%;
+
+    .arrowBtn {
+        * {
+            font-size: 1.4rem;
+        }
+    }
+    .arrowBtn:hover {
+        * {
+            color: var(--primaryColor);
+        }
+    }
+
+    .categoryContainer {  
+        .categoryDiv {
+            align-items: flex-start;
+            width: 81vw;
+            padding: 0 1vw;
+            flex-direction: column;
+            gap: 2rem;
+            overflow: hidden;
+
+            .categoryList {
+                gap: 1vw;
+                padding-top: .5rem;
+                transition: transform 0.5s ease-in-out;
+    
+                .categoryBtn {
+                    width: 15vw;
+    
+                    img {
+                        width: 3rem;
+                    }
+                }
+                .categoryBtn:hover {animation: slide-top 0.2s linear both;}
+                @keyframes slide-top {
+                    0% {transform:translateY(0)}
+                    100% {transform:translateY(-.5rem)}
+                }
+            }
+        }
+    }
+    
+    .productContainer {
+        .productDiv {
+            background-color: white;
+            padding: 1vw;
+            border-radius: 1rem;
+            align-items: flex-start;
+            width: 81vw;   
+            flex-direction: column;
+            overflow: hidden;
+
+            .headerDiv {
+                width: 100%;
+                justify-content: space-between;
+    
+                span {
+                    background-color: var(--greyColor);
+                    width: 0.8rem;
+                    height: 0.8rem;
+                    border-radius: 50%;
+                }
+            }
+
+            .productList {
+                align-items: flex-start;
+                gap: 1vw;
+                transition: transform 0.5s ease-in-out;
+
+                .productBtn {
+                    img {
+                        height: 15rem;
+                        border-radius: 1rem;
+                        width: 15vw;
+                        object-fit: cover;
+                    }
+                
+                    h3 {
+                        font-size: 1.1rem;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.profile {
+    background-color: var(--whiteColor);
+    padding: 0 25%;
+    width: 100%;
+    gap: 5rem;
+    flex-direction: column;
+    padding-top: 20vh;
+    padding-bottom: 10vh;
+
+    .inputProfile {
+        width: 100%;
+
+        .inputDiv {
+            width: 100%;
+            align-items: flex-start;
+            flex-direction: column;
+            
+            * {
+                font-size: 1.2rem;
+            }
+            label {
+                font-weight: bold;
+            }
+            .inputFocus {
+                background-color: white;
+                border-radius: 1rem;
+                padding: .6rem 1.2rem;
+            }
+        }
+
+        button:hover {
+            *{ 
+                color: var(--primaryColor);
+            }
+        }
+    }
+}
+
+.loginPage {
+    height: 100vh;
+    justify-content: center;
+    background-color: var(--whiteColor);
+  
+    .container {
+        height: 75vh;
+        width: 60%;
+        min-width: 600px;
+        border-radius: 1rem;
+        background-color: white;
+    
+        .leftDiv {
+            justify-content: space-between;
+            flex-direction: column;
+            max-width: 50%;
+            height: 100%;
+            padding: 1rem;
+            border-radius: 1rem;
+            background: var(--primaryColor);
+
+            * {
+                color: var(--whiteColor);
+            }
+
+            .headerDiv {
+                margin-top: 3rem;
+                flex-direction: column;
+    
+                img {
+                    width: 5rem;
+                }
+            }
+    
+            .textDiv {
+                text-align: center;
+                flex-direction: column;
+            }
+    
+            .footerDiv {
+                justify-content: space-between;
+                padding: 1rem;
+                height: 5rem;
+                width: 100%;
+                background: rgba(255, 255, 255, 0.25);
+                border-radius: 1rem;
+        
+                .btn {
+                    color: var(--primaryColor);
+                    background: var(--whiteColor);
+                }
+                .btn:hover {
+                    background-color: var(--hoverColor);
+                    transition: 1s ease;
+                }
+            }
+        }
+
+        form {
+            flex-direction: column;
+            margin: auto;
+            padding: 3rem;
+            text-align: center;
+            
+            .inputContainer {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .inputDiv {
+                margin: auto;
+                padding: .6rem 1.2rem;
+                background: var(--whiteColor);
+                border-radius: 1rem;
+            }
+
+            .btn {
+                margin: 1.2rem 0;
+
+                * {
+                    color: var(--whiteColor);
+                    font-size: 1.2rem;
+                }
+    
+                .icon {
+                    transition: .3s ease;
+                    font-size: 2rem;
+                }
+    
+                &:hover {
+                    .icon {
+                        transform: translateX(5px);
+                    }
+                }
+            }
+        }
+    }
+}
+
+.admin {
+    margin: auto;
+    flex-wrap: wrap;
+    gap: 1vw;
+    justify-content: center;
+
+    .btn {
+        flex-direction: column;
+        justify-content: center;
+        width: 35%;
+        height: 20vh;
+
+        * {
+            color: var(--whiteColor);
+        }
+
+        .icon {
+            font-size: 2.5rem;
+        }
+    }
+}
+
+.adminUsers {
+    position: absolute;
+    left: 0;
+    margin-top: 10vh;
+    width: 100%;
+    border: 1px solid var(--blackColor);
+
+    th {
+        background-color: var(--primaryColor);
+        color: var(--whiteColor);
+    }
+
+    td, th {
+        border: 1px solid var(--blackColor);
+        padding: .2rem 1rem;
+
+        select {
+            border: none;
+        }
+
+        button {
+            width: 100%;
+        }
+    }
+
+    .center {
+        text-align: center;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    html {
+        font-size: 10px;
+    }
+
+    .principal {
+        header {
+            .principalBtn {
+                h1 {
+                    display: none;
+                }
+            }
+        }
+    }
+
+    .loginPage, .registerPage {
+        .container {
+            height: 90%;
+            width: 90%;
+            min-width: 0;
+            flex-direction: column;
+        
+            .leftDiv {
+                min-width: 100%;
+                height: 50%;
+                margin-bottom: 2rem;
+        
+                .footerDiv {
+                    height: 4rem;
+                }
+            }
+        }
+    }
+}
