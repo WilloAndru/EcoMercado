@@ -8,7 +8,7 @@ import { dateToDay } from '../utils/dateToDays'
 import { FaArrowRight } from "react-icons/fa"
 import Swal from 'sweetalert2';
 
-const URI = process.env.REACT_APP_API_URL;
+const URI = import.meta.env.VITE_REACT_APP_API_URL;
 
 function ViewProduct() {
 

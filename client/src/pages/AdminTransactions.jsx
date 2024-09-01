@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import ColumTransactions from '../components/ColumnTransactions';
 
-const URL = process.env.REACT_APP_API_URL;
+const URL = import.meta.env.VITE_REACT_APP_API_URL;
 
 function AdminTransactions() {
   

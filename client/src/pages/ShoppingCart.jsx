@@ -3,7 +3,7 @@ import axios from 'axios'
 import ListProducts from '../components/ListProducts';
 import { useNavigate } from 'react-router-dom';
 
-const URI = process.env.REACT_APP_API_URL;
+const URI = import.meta.REACT_APP_API_URL;
 
 function ShoppingCart() {
 

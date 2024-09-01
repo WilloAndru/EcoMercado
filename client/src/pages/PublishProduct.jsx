@@ -4,7 +4,7 @@ import axios from 'axios';
 import Select from 'react-select';
 import { MdAddPhotoAlternate } from "react-icons/md";
 
-const URI = process.env.REACT_APP_API_URL;
+const URI = import.meta.env.VITE_REACT_APP_API_URL;
 
 function PublishProduct() {
 

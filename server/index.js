@@ -7,7 +7,7 @@ import { authMiddleware } from "./middleware/authMiddleware.js"
 const app = express();
 
 app.use(cors({
-    origin: 'http://3.15.194.3:5173'
+    origin: ['http://localhost:5173', 'http://3.15.194.3:5173']
 }));
 app.use(express.json());
 app.use("/api", router);

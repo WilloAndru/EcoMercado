@@ -8,7 +8,7 @@ import InputLogin from '../components/InputLogin'
 import { isPasswordSecure } from '../utils/isPasswordSecure'
 import api from '../services/api'
 
-const URL = process.env.REACT_APP_API_URL;
+const URL = import.meta.env.VITE_REACT_APP_API_URL;
 
 function AuthLogin({ mode }) {
 
@@ -54,7 +54,7 @@ function AuthLogin({ mode }) {
       let response;
       //iniciar sesion
       if (modeStatus.login) {
-        response = await api.post('/login', { email, password });
+        response = await api.post(`${URL}/login`, { email, password });
         if (response.status === 200) {
           localStorage.setItem('token', response.data.token);
           response.data.userRole === "client" ? navigate("/") : navigate("/admin")

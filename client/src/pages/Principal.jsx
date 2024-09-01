@@ -19,7 +19,7 @@ import ProfilePurchases from './ProfilePurchases';
 import EditSales from './EditSales';
 import ProfileSales from './ProfileSales';
 
-const URL = process.env.REACT_APP_API_URL;
+const URL = import.meta.env.VITE_REACT_APP_API_URL;
 
 function Principal({ mode }) {
 

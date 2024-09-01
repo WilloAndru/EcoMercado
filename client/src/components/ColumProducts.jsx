@@ -3,7 +3,7 @@ import { MdDeleteForever } from 'react-icons/md';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
-const URI = process.env.REACT_APP_API_URL;
+const URI = import.meta.env.VITE_REACT_APP_API_URL;
 
 function ColumProducts({ product }) {
   const imageUrl = product.image ? URL.createObjectURL(new Blob([new Uint8Array(product.image.data)], { type: 'image/jpeg' })) : '';

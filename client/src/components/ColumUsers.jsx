@@ -5,7 +5,7 @@ import { IoSaveOutline } from "react-icons/io5";
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
-const URL = process.env.REACT_APP_API_URL;
+const URL = import.meta.env.VITE_REACT_APP_API_URL;
 
 function ColumUsers({ user }) {
     const [edit, setEdit] = useState(false);

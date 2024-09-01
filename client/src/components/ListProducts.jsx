@@ -4,7 +4,7 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { arrivalDays } from '../utils/arrivalDays'
 
-const URI = process.env.REACT_APP_API_URL;
+const URI = import.meta.env.VITE_REACT_APP_API_URL;
 
 function ListProducts({ mode, listProducts, listTransactions }) {
 

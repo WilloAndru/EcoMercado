@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import ColumUsers from '../components/ColumUsers';
 
-const URL = process.env.REACT_APP_API_URL;
+const URL = import.meta.env.VITE_REACT_APP_API_URL;
 
 function AdminUsers() {
 

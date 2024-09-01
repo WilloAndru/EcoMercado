@@ -4,7 +4,7 @@ import { FaEdit } from 'react-icons/fa';
 import { IoSaveOutline } from "react-icons/io5";
 import { useNavigate } from 'react-router-dom';
 
-const URL = process.env.REACT_APP_API_URL;
+const URL = import.meta.env.VITE_REACT_APP_API_URL;
 
 function InputComponent(props) {
 
