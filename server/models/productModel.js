@@ -8,8 +8,7 @@ const ProductModel = db.define('products', {
     description: { type: DataTypes.STRING },
     price: { type: DataTypes.FLOAT },
     quantity: { type: DataTypes.INTEGER },
-    address: { type: DataTypes.STRING },
-    category: { type: DataTypes.STRING },
+    categoryId: { type: DataTypes.INTEGER }
 });
 
 export default ProductModel

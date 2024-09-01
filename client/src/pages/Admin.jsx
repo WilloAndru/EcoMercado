@@ -8,10 +8,10 @@ import BtnAdmin from '../components/BtnAdmin';
 function Admin() {
 
   const datas = [
-    {title: "Gestion de usuarios", icon: <FaUserCircle className='icon'/>, link: "users"},
-    {title: "Gestion de productos", icon: <MdOutlineInventory2 className='icon'/>, link: "products"},
-    {title: "Gestion de finanzas", icon: <FaMoneyBillTrendUp className='icon'/>, link: "profits"},
-    {title: "Gestion de envios y pedidos", icon: <TbTruckDelivery className='icon'/>, link: "shipments"},
+    { title: "Gestion de usuarios", icon: <FaUserCircle className='icon' />, link: "users" },
+    { title: "Gestion de productos", icon: <MdOutlineInventory2 className='icon' />, link: "products" },
+    { title: "Gestion de transacciones", icon: <TbTruckDelivery className='icon' />, link: "transactions" },
+    { title: "Datos relevantes", icon: <FaMoneyBillTrendUp className='icon' />, link: "datas" },
   ]
 
   const buttons = datas.map((data, i) => {
@@ -27,7 +27,9 @@ function Admin() {
 
   return (
     <div className='admin flex'>
-      {buttons}
+      <div className='flex div'>
+        {buttons}
+      </div>
     </div>
   )
 }

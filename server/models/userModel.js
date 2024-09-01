@@ -6,7 +6,6 @@ const UserModel = db.define('users', {
     role: { type: DataTypes.ENUM('client', 'admin'), defaultValue: 'client' },
     email: { type: DataTypes.STRING },
     password: { type: DataTypes.STRING },
-    name: { type: DataTypes.STRING },
     address: { type: DataTypes.STRING },
     phone: { type: DataTypes.STRING },
 });

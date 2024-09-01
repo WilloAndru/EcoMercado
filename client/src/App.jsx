@@ -11,13 +11,24 @@ function App() {
     <Router>
       <Suspense>
         <Routes>
+          {/* Principal */}
           <Route path="/" element={<Principal mode=""/>} />
           <Route path="/admin" element={<Principal mode="admin"/>} />
           <Route path="/admin/users" element={<Principal mode="adminUsers"/>} />
           <Route path="/admin/products" element={<Principal mode="adminProducts"/>} />
-          <Route path="/admin/profits" element={<Principal mode="adminProfits"/>} />
-          <Route path="/admin/shipments" element={<Principal mode="adminShipmnets"/>} />
+          <Route path="/admin/transactions" element={<Principal mode="adminTransactions"/>} />
+          <Route path="/admin/datas" element={<Principal mode="adminDatas"/>} />
           <Route path="/profile" element={<Principal mode="profile" />} />
+          <Route path="/search" element={<Principal mode="search" />} />
+          <Route path="/product/:id" element={<Principal mode="product" />} />
+          <Route path="/buyProduct/:type" element={<Principal mode="buyProduct" />} />
+          <Route path="/shoppingCart" element={<Principal mode="shoppingCart" />} />
+          <Route path="/publishProduct/:idProduct" element={<Principal mode="publishProduct" />} />
+          <Route path="/editSales" element={<Principal mode="editSales" />} />
+          <Route path="/profileSales" element={<Principal mode="profileSales" />} />
+          <Route path="/profilePurchases" element={<Principal mode="profilePurchases" />} />
+
+          {/* AuthLogin */}
           <Route path="/login" element={<AuthLogin mode="login" />} />
           <Route path="/registerEmail" element={<AuthLogin mode="registerEmail" />} />
           <Route path="/confirmEmail" element={<AuthLogin mode="confirmEmail" />} />

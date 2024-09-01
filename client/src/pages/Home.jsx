@@ -2,24 +2,39 @@ import React , { useEffect, useState } from 'react'
 import SliderContainer from '../components/SliderContainer';
 import axios from 'axios';
 
-const URL = "http://localhost:8000/"
+const URI = process.env.REACT_APP_API_URL;
 
 function Home() {
 
-  const [products, setProducts] = useState([]);
+  const [bestSellers, setBestSellers] = useState([]);
+  const [latest, setLatest] = useState([]);
+  const [forDay, setForDay] = useState([]);
   const [categories, setCategories] = useState([]);
+
+  const getDayNumber = () => {
+    const dayOfWeek = new Date().getDay();
+    
+    return (dayOfWeek === 0) ? 7 : dayOfWeek;
+  }
 
   useEffect(() => {
     const getDatas = async () => {
-      const res = await axios.get(URL);
-      setCategories(res.data.categories);
-      setProducts(res.data.products);
+      const resCategories = await axios.get(`${URI}/categories`);
+      setCategories(resCategories.data);
+      const resBestSellers = await axios.get(`${URI}/bestSellers`)
+      setBestSellers(resBestSellers.data);
+      const resLatest = await axios.get(`${URI}/latest`);
+      setLatest(resLatest.data);   
+      const resForDay = await axios.post(`${URI}/forDay`, {
+        categoryId: getDayNumber()
+      });
+      setForDay(resForDay.data);
     }
     getDatas()
   }, []);
 
   return (
-    <div className='home flex'>
+    <div className='page home flex'>
 
       <h1>Compra y vende articulos sostenibles en EcoMercado</h1>
 
@@ -31,20 +46,20 @@ function Home() {
 
       <SliderContainer
         className='product' 
-        title='Mas vendidos' 
-        list={products || []}
+        title='Los mas vendidos' 
+        list={bestSellers || []}
       />
 
       <SliderContainer
         className='product' 
-        title='Elegidos para ti' 
-        list={products || []}
+        title='Descubre lo mas nuevo' 
+        list={latest || []}
       />
 
       <SliderContainer
         className='product' 
-        title='Inspirados en tus favoritos' 
-        list={products || []}
+        title='Seleccion del dia' 
+        list={forDay || []}
       />
   
     </div>

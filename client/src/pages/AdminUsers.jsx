@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import ColumUsers from '../components/ColumUsers';
 
-const URL = "http://localhost:8000/admin/users"
+const URL = process.env.REACT_APP_API_URL;
 
 function AdminUsers() {
 
@@ -10,7 +10,7 @@ function AdminUsers() {
 
     useEffect(() => {
         const fetchUsers = async () => {
-            const res = await axios.get(URL); 
+            const res = await axios.get(`${URL}/users`); 
             setUsers(res.data);
         };
         fetchUsers();
@@ -37,7 +37,6 @@ function AdminUsers() {
                 <th>{keys[5]}</th>
                 <th>{keys[6]}</th>
                 <th>{keys[7]}</th>
-                <th>{keys[8]}</th>
                 <th>Editar</th>
                 <th>Eliminar</th>
                 </tr>

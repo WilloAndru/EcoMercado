@@ -4,7 +4,7 @@ import { FaEdit } from 'react-icons/fa';
 import { IoSaveOutline } from "react-icons/io5";
 import { useNavigate } from 'react-router-dom';
 
-const URL = "http://localhost:8000/"
+const URL = process.env.REACT_APP_API_URL;
 
 function InputComponent(props) {
 
@@ -17,7 +17,7 @@ function InputComponent(props) {
     setInputValue(props.content || '');
     setSaveEmail(localStorage.getItem('saveEmail'));
   }, [props.content]);
-  
+
   const handleEditClick = (event) => {
     event.preventDefault()
     setEditing(true);
@@ -30,30 +30,30 @@ function InputComponent(props) {
   const handleSaveClick = async (event) => {
     event.preventDefault();
     setEditing(false);
-    await axios.post(`${URL}profile`, {
+    await axios.post(`${URL}/profile`, {
       email: saveEmail,
-      attribute : props.attribute,
-      value : inputValue
+      attribute: props.attribute,
+      value: inputValue
     })
   };
 
   return (
     <form className='flex inputProfile' onSubmit={editing ? handleSaveClick : handleEditClick}>
-        <div className='flex inputDiv'>
-            <label>{props.label}</label>
-            <input 
-                className={editing ? 'inputFocus' : ""}
-                value={inputValue}
-                readOnly={!editing}
-                onChange={e => setInputValue(e.target.value)}
-            />
-        </div>
-        <button 
-            type='submit'
-            style={{display: props.disabled && "none"}}
-        >
-            {editing ? <IoSaveOutline className='icon'/> : <FaEdit className='icon' />}
-        </button>
+      <div className='flex inputDiv'>
+        <label>{props.label}</label>
+        <input
+          className={editing ? 'inputFocus' : "input"}
+          value={inputValue}
+          readOnly={!editing}
+          onChange={e => setInputValue(e.target.value)}
+        />
+      </div>
+      <button
+        type='submit'
+        style={{ display: props.disabled && "none" }}
+      >
+        {editing ? <IoSaveOutline className='icon' /> : <FaEdit className='icon' />}
+      </button>
     </form>
   );
 }

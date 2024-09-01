@@ -1,4 +1,9 @@
 import UserModel from "../models/userModel.js";
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export const getAllUsers = async (req, res) => {
     try {
@@ -10,8 +15,12 @@ export const getAllUsers = async (req, res) => {
 }
 
 export const getUserDatas = async (req, res) => {
+    const token = req.headers.authorization?.split(' ')[1];
+
     try {
-        const user = await UserModel.findOne({ where: { email: req.params.email } });
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decoded.userId;
+        const user = await UserModel.findOne({ where: { id: userId } });
         res.status(200).json(user);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -20,17 +29,20 @@ export const getUserDatas = async (req, res) => {
 
 export const loginUser = async (req, res) => {
     const { email, password } = req.body;
-
     try {
         const user = await UserModel.findOne({ where: { email } });
-
         if (!user) {
             return res.status(404).json({ message: "Correo sin registrar" });
-        } else if (password === user.password) {
-            res.status(200).json(user.role);
-        } else {
-            res.status(401).json({ message: "Contraseña incorrecta" });
         }
+
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+
+        if (!isPasswordValid) {
+            return res.status(401).json({ message: 'Contraseña invalida' });
+        }
+
+        const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '24h' });
+        res.status(200).json({ token: token, userRole: user.role });
     } catch (error) {
         res.status(500).json({ message: "Error del servidor" });
     }
@@ -44,21 +56,24 @@ export const repeatEmail = async (req, res) => {
         if (!user) {
             res.status(200).json({ message: "Correo agregado" });
         } else {
-                res.status(400).json({ message: "Correo ya registrado" });
+            res.status(400).json({ message: "Correo ya registrado" });
         }
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
-export const createPassword = async (req, res) => {
+export const register = async (req, res) => {
     const { email, password } = req.body;
     try {
-        await UserModel.create({
+        const hashedPassword = await bcrypt.hash(password, 8);
+        const user = await UserModel.create({
             email: email,
-            password: password
+            password: hashedPassword
         })
-        res.status(200).json({ message: "Usuario agregado" });
+
+        const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '24h' });
+        res.status(200).json(token);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -66,11 +81,20 @@ export const createPassword = async (req, res) => {
 
 export const changePassword = async (req, res) => {
     const { email, password } = req.body;
+
     try {
+        const hashedPassword = await bcrypt.hash(password, 8);
         const user = await UserModel.findOne({ where: { email } });
-        user.password = password;
+        user.password = hashedPassword;
         await user.save();
-        res.status(200).json({ message: "Contraseña cambiada" });
+
+        if (req.body.token) {
+            const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '24h' });
+            res.status(200).json(token);
+        } else {
+            res.status(200).json({ message: "Contraseña cambiada" })
+        }
+
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -120,6 +144,15 @@ export const deleteUser = async (req, res) => {
         const user = await UserModel.findOne({ where: { email } });
         await user.destroy();
         res.status(200).json({ message: "Usuario eliminado" });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
+export const getUsersCount = async (req, res) => {
+    try {
+        const usersCount = await UserModel.count();
+        res.status(200).json(usersCount);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

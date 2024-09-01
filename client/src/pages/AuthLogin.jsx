@@ -6,12 +6,13 @@ import { MdMarkEmailRead } from 'react-icons/md'
 import { AiOutlineSwapRight } from 'react-icons/ai'
 import InputLogin from '../components/InputLogin'
 import { isPasswordSecure } from '../utils/isPasswordSecure'
+import api from '../services/api'
 
-const URL = "http://localhost:8000/"
+const URL = process.env.REACT_APP_API_URL;
 
-function AuthLogin({mode}) {
-  
-  const [saveEmail, setSaveEmail] = useState("");
+function AuthLogin({ mode }) {
+
+  const [saveEmail, setSaveEmail] = useState("")
   const [email, setEmail] = useState("")
   const [confirmNum, setConfirmNum] = useState("")
   const [password, setPassword] = useState("")
@@ -19,12 +20,20 @@ function AuthLogin({mode}) {
   const [message, setMessage] = useState("")
   const location = useLocation()
   const navigate = useNavigate()
-  
+
   useEffect(() => {
-    const savedEmail = localStorage.getItem('saveEmail');
-    if (savedEmail) {
-      setSaveEmail(savedEmail);
+    const fetchData = async () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+          const response = await axios.get(`${URL}/getUserDatas`, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          });
+          setSaveEmail(response.data.email);
+      }
     }
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -45,31 +54,22 @@ function AuthLogin({mode}) {
       let response;
       //iniciar sesion
       if (modeStatus.login) {
-        response = await axios.post(`${URL}login`, {
-          email: email,
-          password: password,
-        });
+        response = await api.post('/login', { email, password });
         if (response.status === 200) {
-          localStorage.setItem('saveEmail', email);
-          if (response.data === "client") {
-            navigate("/");
-          } else {
-            navigate("/admin");
-          }
+          localStorage.setItem('token', response.data.token);
+          response.data.userRole === "client" ? navigate("/") : navigate("/admin")
         }
-      } 
+      }
       //registrar correo nuevo
       else if (modeStatus.registerEmail) {
-        response = await axios.post(`${URL}registerEmail`, {
+        response = await axios.post(`${URL}/registerEmail`, {
           email: email,
         });
         if (response.status === 200) {
           localStorage.setItem('testEmail', email);
           navigate("/confirmEmail");
-        } else {
-          setMessage(response.data.message);
         }
-      } 
+      }
       //codigo de verificacion
       else if (modeStatus.confirmEmail) {
         const regex = /^\d{6}$/;
@@ -78,7 +78,7 @@ function AuthLogin({mode}) {
         } else {
           setMessage("Numero incorrecto");
         }
-      } 
+      }
       //registrar contraseña
       else if (modeStatus.registerPassword) {
         const passwordSecure = isPasswordSecure(password);
@@ -86,35 +86,36 @@ function AuthLogin({mode}) {
           if (password === confirmPassword) {
             //cambiar contraseña de correo logeado
             if (saveEmail) {
-              response = await axios.patch(`${URL}changePassword`, {
+              response = await axios.patch(`${URL}/changePassword`, {
                 email: saveEmail,
                 password: password
               });
               if (response.status === 200) {
                 navigate("/profile");
               }
-            } 
+            }
             //cambiar contraseña de correo no logeado
             else if (localStorage.getItem("testEmailForgotPassword")) {
               const Email = localStorage.getItem("testEmailForgotPassword");
-              response = await axios.patch(`${URL}changePassword`, {
+              response = await axios.patch(`${URL}/changePassword`, {
                 email: Email,
-                password: password
+                password: password,
+                token: true
               });
               if (response.status === 200) {
-                localStorage.setItem("saveEmail", Email);
+                localStorage.setItem('token', response.data);
                 localStorage.removeItem("testEmailForgotPassword");
                 navigate("/");
               }
             }
             // crear nuevo usuario
             else {
-              response = await axios.post(`${URL}registerPassword`, {
+              response = await axios.post(`${URL}/register`, {
                 email: localStorage.getItem("testEmail"),
                 password: password
               });
               if (response.status === 200) {
-                localStorage.setItem("saveEmail", localStorage.getItem("testEmail"));
+                localStorage.setItem('token', response.data);
                 navigate("/");
               }
             }
@@ -124,21 +125,18 @@ function AuthLogin({mode}) {
         } else {
           setMessage(passwordSecure.message);
         }
-      
+
       }
       //ingresar correo para recuperar contraseña
       else if (modeStatus.forgotPassword) {
-        response = await axios.post(`${URL}forgotPassword`, {
+        response = await axios.post(`${URL}/forgotPassword`, {
           email: email,
         });
         if (response.status === 200) {
           localStorage.setItem('testEmailForgotPassword', email);
           navigate("/confirmEmail");
-        } else {
-          setMessage(response.data.message);
         }
       }
-
     } catch (error) {
       if (error.response) {
         setMessage(error.response.data.message);
@@ -147,15 +145,15 @@ function AuthLogin({mode}) {
       }
     }
   }
-  
+
   return (
     <div className='loginPage flex'>
-    <div className="container flex">
+      <div className="container flex">
 
         <div className="leftDiv flex">
 
           <Link className="headerDiv flex" to={"/"}>
-            <img src="eco.png" alt="Icono Ecomercado"/>
+            <img src="eco.png" alt="Icono Ecomercado" />
             <h1>EcoMercado</h1>
           </Link>
 
@@ -172,9 +170,9 @@ function AuthLogin({mode}) {
             <div className="footerDiv flex">
               <span className='text'>{modeStatus.login ? "¿No tienes una cuenta?" : "¿Ya tienes una cuenta?"}</span>
               <Link to={modeStatus.login ? "/registerEmail" : "/login"}>
-              <button className='btn' onClick={() => localStorage.clear()}>
-                {modeStatus.login ? "Registrate" : "Inicia sesion"}
-              </button>
+                <button className='btn' onClick={() => localStorage.clear()}>
+                  {modeStatus.login ? "Registrate" : "Inicia sesion"}
+                </button>
               </Link>
             </div>
           )}
@@ -186,23 +184,23 @@ function AuthLogin({mode}) {
           <span className={message ? "showMessage" : "hiddenMessage"}>
             {message}
           </span>
-          
+
           {/* input correo */}
           {(modeStatus.login || modeStatus.registerEmail || modeStatus.forgotPassword) && (
             <InputLogin
               label="Correo"
-              icon={<MdMarkEmailRead className="icon"/>}
+              icon={<MdMarkEmailRead className="icon" />}
               type="email"
               placeholder="Ingrese su correo"
               onChange={(e) => setEmail(e.target.value)}
             />
           )}
 
-          {/* input contraseña */}  
+          {/* input contraseña */}
           {(modeStatus.login || modeStatus.registerPassword) && (
             <InputLogin
               label="Contraseña"
-              icon={<BsFillShieldLockFill className="icon"/>}
+              icon={<BsFillShieldLockFill className="icon" />}
               type="password"
               placeholder="Ingrese su contraseña"
               onChange={(e) => setPassword(e.target.value)}
@@ -221,7 +219,7 @@ function AuthLogin({mode}) {
           {modeStatus.registerPassword && (
             <InputLogin
               label="Confirmar contraseña"
-              icon={<BsFillShieldLockFill className="icon"/>}
+              icon={<BsFillShieldLockFill className="icon" />}
               type="password"
               placeholder="Confirme su contraseña"
               onChange={(e) => setConfirmPassword(e.target.value)}
@@ -230,7 +228,7 @@ function AuthLogin({mode}) {
 
           <button type='submit' className='btn flex'>
             <span>{modeStatus.login ? "Iniciar sesión" : modeStatus.registerPassword ? "Finalizar" : "Continuar"}</span>
-            <AiOutlineSwapRight className='icon'/>
+            <AiOutlineSwapRight className='icon' />
           </button>
 
           {/* link olvido contraseña */}
@@ -240,7 +238,7 @@ function AuthLogin({mode}) {
 
         </form>
 
-    </div>
+      </div>
     </div>
   )
 }

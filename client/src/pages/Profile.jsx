@@ -1,19 +1,39 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import InputComponent from '../components/InputProfile';
 
-function Profile({user}) {
+const URL = process.env.REACT_APP_API_URL;
+
+function Profile() {
+
+  const [user, setUser] = useState({});
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        const response = await axios.get(`${URL}/getUserDatas`, {
+          headers: {
+              Authorization: `Bearer ${token}`
+          }
+      });
+        setUser(response.data);
+      }
+    }
+    fetchUser();
+  }, [])
 
   const datas = [
-    {name: "Correo", content: user.email, disabled: true}, 
-    { attribute: "password", 
-      name: "Contraseña", 
-      content: user.password, 
+    { name: "Correo", content: user.email, disabled: true },
+    {
+      attribute: "password",
+      name: "Contraseña",
+      content: "********",
       link: "/confirmEmail",
       disabled: user.role === "admin"
-    }, 
-    {attribute: "name", name: "Nombre", content: user.name}, 
-    {attribute: "address", name: "Direccion", content: user.address}, 
-    {attribute: "phone", name: "Telefono", content: user.phone}, 
+    },
+    { attribute: "address", name: "Direccion", content: user.address },
+    { attribute: "phone", name: "Telefono", content: user.phone },
   ]
 
   const inputs = datas.map((data, i) => {
@@ -28,9 +48,9 @@ function Profile({user}) {
       />
     )
   })
-  
+
   return (
-    <div className='profile flex'>
+    <div className='profile page flex'>
       {inputs}
     </div>
   )

@@ -5,7 +5,7 @@ import { IoSaveOutline } from "react-icons/io5";
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
-const URL = "http://localhost:8000/admin/users/"
+const URL = process.env.REACT_APP_API_URL;
 
 function ColumUsers({ user }) {
     const [edit, setEdit] = useState(false);
@@ -21,7 +21,7 @@ function ColumUsers({ user }) {
 
     const handleSaveClick = async () => {
         setEdit(false);
-        await axios.post(URL, {
+        await axios.post(`${URL}/users`, {
             email: user.email,
             role: role
         });
@@ -39,7 +39,7 @@ function ColumUsers({ user }) {
         });
 
         if (result.isConfirmed) {
-            await axios.delete(`${URL}${user.email}`);
+            await axios.delete(`${URL}/users/${user.email}`);
             window.location.reload();
         }
     }
@@ -54,7 +54,6 @@ function ColumUsers({ user }) {
                 </select>
             </td>
             <td>{user.email}</td>
-            <td>{user.name}</td>
             <td>{user.address}</td>
             <td>{user.phone}</td>
             <td>{user.createdAt}</td>
