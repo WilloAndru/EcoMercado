@@ -1,6 +1,6 @@
 import express from "express"
 import multer from 'multer'
-import { repeatEmail, loginUser, register, changePassword, findEmail, getUserDatas, profileDatas, getAllUsers, changeRole, deleteUser, getUsersCount} from "../controllers/userController.js";
+import { repeatEmail, loginUser, register, registerGoogle, changePassword, findEmail, getUserDatas, profileDatas, getAllUsers, changeRole, deleteUser, getUsersCount} from "../controllers/userController.js";
 import { getAllCategories } from "../controllers/categoryController.js";
 import { getAllProducts, getProduct, getProductsById, publishProduct, updateProduct, deleteProduct, getProductsIdNames, getProductsCount, getLatest, getForDay } from "../controllers/productController.js";
 import { getSellerByProdctId, createIncome, createSale, getPurchasesProducts, getSalesProducts, getSoldProducts, getAllTransactions, getBestSellers, getProfits } from "../controllers/transactionController.js";
@@ -14,6 +14,7 @@ const upload = multer({ storage: storage });
 router.post("/login", loginUser)
 router.post("/registerEmail", repeatEmail)
 router.post("/register", register)
+router.post("/registerGoogle", registerGoogle)
 router.patch("/changePassword", changePassword)
 router.post("/forgotPassword", findEmail)
 router.get("/getUserDatas", getUserDatas)

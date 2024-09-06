@@ -2,8 +2,12 @@ import UserModel from "../models/userModel.js";
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
+import crypto from 'crypto';
+import { OAuth2Client } from 'google-auth-library';
 
 dotenv.config();
+const GOOGLE_CLIENT_ID = '350518038891-ng6gtlroqcb9f802eisp5adorqskgrfr.apps.googleusercontent.com';
+const client = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 export const getAllUsers = async (req, res) => {
     try {
@@ -63,6 +67,36 @@ export const repeatEmail = async (req, res) => {
     }
 };
 
+export const registerGoogle = async (req, res) => {
+    const { token } = req.body;    
+    try {
+        const ticket = await client.verifyIdToken({
+            idToken: token,
+            audience: GOOGLE_CLIENT_ID,
+        });
+
+        const { email } = ticket.getPayload();
+        let user = await UserModel.findOne({ where: { email } });
+
+        if (user) {
+            const Token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '24h' });
+            res.status(200).json({ token: Token, userRole: user.role });
+        } else {
+            const randomPassword = crypto.randomBytes(8).toString('hex');
+            const hashedPassword = await bcrypt.hash(randomPassword, 8);
+            user = await UserModel.create({
+                email: email,
+                password: hashedPassword
+            });
+            const Token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '24h' });
+            res.status(200).json({ token: Token, userRole: user.role });
+        }
+        
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 export const register = async (req, res) => {
     const { email, password } = req.body;
     try {
@@ -71,7 +105,6 @@ export const register = async (req, res) => {
             email: email,
             password: hashedPassword
         })
-
         const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '24h' });
         res.status(200).json(token);
     } catch (error) {

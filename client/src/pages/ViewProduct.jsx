@@ -6,6 +6,7 @@ import { formatPrice } from '../utils/formatPrice'
 import { useNavigate } from 'react-router-dom'
 import { dateToDay } from '../utils/dateToDays'
 import { FaArrowRight } from "react-icons/fa"
+import { justNameUser } from '../utils/justNameUser'
 import Swal from 'sweetalert2';
 
 const URI = import.meta.env.VITE_REACT_APP_API_URL;
@@ -38,7 +39,7 @@ function ViewProduct() {
       setProduct(res.data)
 
       const resSeller = await axios.get(`${URI}/productSeller/${id}`)
-      setSellerName(resSeller.data.userName)
+      setSellerName(justNameUser(resSeller.data.userName))
       setSellerId(resSeller.data.userId)
       
       const resSuggest = await axios.get(`${URI}/products`)

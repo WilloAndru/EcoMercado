@@ -450,6 +450,7 @@ input:focus {
             overflow: hidden;
             text-overflow: ellipsis;
             max-width: var(--widthHeaderBut);
+            
         }
 
         .btnCart {
@@ -479,7 +480,7 @@ input:focus {
 
         .optionsUser {
             gap: 0;
-            top: 70%;
+            top: 67%;
             position: absolute;
             align-items: flex-start;
             flex-direction: column;

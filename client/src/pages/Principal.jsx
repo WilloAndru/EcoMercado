@@ -96,7 +96,7 @@ function Principal({ mode }) {
     const handleInputBlur = () => {
         blurTimeout.current = setTimeout(() => {
             setShowProducts(false);
-        }, 100);
+        }, 500);
     };
 
     const goSearchInterface = async (e) => {
