@@ -62,6 +62,7 @@ function Principal({ mode }) {
                         }
                     });
                     setUser(response.data);
+                    localStorage.setItem('saveEmail', response.data.email);
                 } catch (error) {
                     localStorage.removeItem('token');
                 }
