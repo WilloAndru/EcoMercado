@@ -20,8 +20,7 @@ try {
     console.log(`Error ${error}`);
 };
 
-const PUERTO = 8000;
-
-app.listen(PUERTO, () => {
-    console.log(`Corriendo en http://localhost:${PUERTO}`);
+const PORT = process.env.PORT || 8000;
+app.listen(PORT, () => {
+    console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
