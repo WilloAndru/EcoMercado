@@ -51,7 +51,9 @@ export const registerGoogle = async (req, res) => {
             const hashedPassword = await bcrypt.hash(randomPassword, 8);
             user = await UserModel.create({
                 email: email,
-                password: hashedPassword
+                password: hashedPassword,
+                address: '',
+                phone: ''
             });
             const Token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '24h' });
             res.status(200).json({ token: Token, userRole: user.role });
