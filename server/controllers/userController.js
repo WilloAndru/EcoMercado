@@ -41,30 +41,24 @@ export const registerGoogle = async (req, res) => {
         });
 
         const { email } = ticket.getPayload();
-
         let user = await UserModel.findOne({ where: { email } });
 
         if (user) {
             const Token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '24h' });
-            return res.status(200).json({ token: Token, userRole: user.role });
+            res.status(200).json({ token: Token, userRole: user.role });
+        } else {
+            const randomPassword = crypto.randomBytes(8).toString('hex');
+            const hashedPassword = await bcrypt.hash(randomPassword, 8);
+            user = await UserModel.create({
+                email: email,
+                password: hashedPassword
+            });
+            const Token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '24h' });
+            res.status(200).json({ token: Token, userRole: user.role });
         }
 
-        // Si no existe, crear el usuario con datos por defecto
-        const randomPassword = crypto.randomBytes(8).toString('hex');
-        const hashedPassword = await bcrypt.hash(randomPassword, 8);
-
-        user = await UserModel.create({
-            email: email,
-            password: hashedPassword,
-            address: 'N/A',       // valor por defecto para evitar error NOT NULL
-            phone: '0000000000'   // valor por defecto para evitar error NOT NULL
-        });
-
-        const Token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '24h' });
-        res.status(200).json({ token: Token, userRole: user.role });
-
     } catch (error) {
-        console.error("❌ Error en registerGoogle:", error); // 🔥 Esto se verá en Logs de Render
+        console.error("❌ Error en registerGoogle:", error);
         res.status(500).json({ message: error.message });
     }
 };
