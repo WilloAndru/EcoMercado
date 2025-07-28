@@ -129,6 +129,7 @@ export const sendEmail = async (req, res) => {
 
         res.status(200).json('Codigo Enviado');
     } catch (error) {
+        console.error("❌ Error en registerGoogle:", error);
         res.status(500).json({ message: 'Error del servidor' });
     }
 };
