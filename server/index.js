@@ -1,26 +1,32 @@
-import express from "express"
-import cors from "cors"
-import db from "./config/db.js"
-import router from "./routes/routes.js"
-import { authMiddleware } from "./middleware/authMiddleware.js"
+import express from "express";
+import cors from "cors";
+import db from "./config/db.js";
+import router from "./routes/routes.js";
+import { authMiddleware } from "./middleware/authMiddleware.js";
 
 const app = express();
 
 app.use(cors({ origin: '*' }));
 app.use(express.json());
+
+app.get("/", (req, res) => {
+  res.json({ status: "ok", message: "EcoMercado API running 🚀" });
+});
+
 app.use("/api", router);
+
 app.get('/api/protected', authMiddleware, (req, res) => {
-    res.status(200).json({ message: 'Acceso concedido a contenido protegido' });
-})
+  res.status(200).json({ message: 'Acceso concedido a contenido protegido' });
+});
 
 try {
-    await db.authenticate()
-    console.log("Conexion exitosa a la base de datos");
+  await db.authenticate();
+  console.log("Conexion exitosa a la base de datos");
 } catch (error) {
-    console.log(`Error ${error}`);
-};
+  console.log(`Error ${error}`);
+}
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
-    console.log(`Servidor corriendo en el puerto ${PORT}`);
+  console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
