@@ -112,12 +112,15 @@ export const getUsersCount = async (req, res) => {
 export const sendEmail = async (req, res) => {
     try {
         const { email } = req.body;
-        const user = await UserModel.findOne({ where: { email } });
+        console.log("📩 Petición de reset password para:", email);
 
-        if (!user) return res.status(404).json({ message: 'Unregistered user' });
+        const user = await UserModel.findOne({ where: { email } });
+        if (!user) {
+            console.log("❌ Usuario no encontrado");
+            return res.status(404).json({ message: 'Unregistered user' });
+        }
 
         const code = Math.floor(100000 + Math.random() * 900000).toString();
-
         const expires = new Date(Date.now() + 5 * 60 * 1000);
 
         await user.update({
@@ -125,12 +128,13 @@ export const sendEmail = async (req, res) => {
             resetCodeExpires: expires,
         });
 
+        console.log("✅ Código generado:", code);
         await sendResetEmail(user.email, code);
 
         res.status(200).json('Codigo Enviado');
     } catch (error) {
-        console.error("❌ Error en registerGoogle:", error);
-        res.status(500).json({ message: 'Error del servidor' });
+        console.error("❌ Error en sendEmail:", error);
+        res.status(500).json({ message: error.message });
     }
 };
 

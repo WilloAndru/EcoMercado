@@ -10,11 +10,13 @@ async function sendResetEmail(to, code) {
   });
 
   await transporter.sendMail({
-    from: '"Mi App" <no-reply@miapp.com>',
+    from: `"EcoMercado" <${process.env.MAIL_USER}>`,
     to,
     subject: 'Recuperación de contraseña',
     html: `<p>Tu código de recuperación es: <strong>${code}</strong></p><p>Expira en 5 minutos.</p>`
   });
+
+  console.log(`✅ Email enviado a ${to}`);
 }
 
 export default sendResetEmail;

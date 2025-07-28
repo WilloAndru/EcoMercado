@@ -117,7 +117,7 @@ function AuthLogin({ mode }) {
               />
             )}
 
-            <button type='submit' className='btn flex'>{modeStatus.default ? 'Enter your email' : 'Continue'}</button>
+            {/* <button type='submit' className='btn flex'>{modeStatus.default ? 'Enter your email' : 'Continue'}</button> */}
 
             <label>By continuing, you agree to {COMPANY}'s Terms and Conditions of Use.</label>
           </form>
