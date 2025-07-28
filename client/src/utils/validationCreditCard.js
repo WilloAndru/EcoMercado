@@ -1,4 +1,4 @@
-export function validationCredirCard(cardNumber, expiryDate, cvv, name) {
+export function validateCreditCard(cardNumber, expiryDate, cvv, name) {
 
   const [month, year] = expiryDate.split('/').map(part => part.trim());
   const currentYear = new Date().getFullYear() % 100;
@@ -6,21 +6,21 @@ export function validationCredirCard(cardNumber, expiryDate, cvv, name) {
   const sanitizedCardNumber = cardNumber.replace(/\s/g, '');
 
   if (!/^\d{16}$/.test(sanitizedCardNumber)) {
-    return 'Número de tarjeta inválido';
+    return 'Invalid card number';
   }
 
   else if (!/^\d{2}\/\d{2}$/.test(expiryDate) ||
     (parseInt(year) < currentYear) ||
     (parseInt(year) === currentYear && parseInt(month) < currentMonth)) {
-    return 'Fecha de vencimiento inválida';
+    return 'Invalid expiration date';
   }
 
   else if (!/^\d{3}$/.test(cvv)) {
-    return 'CVV inválido';
+    return 'Invalid CVV';
   }
 
   else if (!/^\w+ \w+$/.test(name)) {
-    return 'Nombre del titular inválido';
+    return "Invalid cardholder's name";
   }
 
   else {

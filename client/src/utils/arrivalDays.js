@@ -13,5 +13,7 @@ export function arrivalDays(fecha) {
 
   const diferenciaEnDias = Math.ceil(diferenciaEnMilisegundos / milisegundosEnUnDia);
 
-  return diferenciaEnDias > 0 ? `Llega en ${diferenciaEnDias} ${diferenciaEnDias !== 1 ? "días" : "día"}` : "Adquirido"
+  return diferenciaEnDias > 0 
+    ? `Arrives in ${diferenciaEnDias} ${diferenciaEnDias !== 1 ? "days" : "day"}` 
+    : "Acquired";
 }

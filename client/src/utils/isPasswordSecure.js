@@ -6,13 +6,13 @@ export function isPasswordSecure(password) {
   
     switch (true) {
       case password.length < minLength:
-        return { secure: false, message: "La contraseña debe tener al menos 8 caracteres." };
+        return { secure: false, message: "The password must be at least 8 characters long." };
       case !hasUpperCase:
-        return { secure: false, message: "la contraseña debe contener al menos una mayúscula." };
+        return { secure: false, message: "The password must contain at least one uppercase letter." };
       case !hasNumber:
-        return { secure: false, message: "La contrasela debe contener al menos un número." };
+        return { secure: false, message: "The password must contain at least one number." };
       case !hasSpecialChar:
-        return { secure: false, message: "La contrasela debe contener al menos un caracter especial como [!@#$%]" };
+        return { secure: false, message: "The password must contain at least one special character such as [!@#$%]." };
       default:
         return { secure: true, message: "" };
     }
