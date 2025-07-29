@@ -34,21 +34,21 @@ function Principal({ mode }) {
   const blurTimeout = useRef(null);
 
   let modeStatus = {
-    home: true ? mode === "" : false,
-    profile: true ? mode === "profile" : false,
-    admin: true ? mode === "admin" : false,
-    adminUsers: true ? mode === "adminUsers" : false,
-    adminProducts: true ? mode === "adminProducts" : false,
-    adminTransactions: true ? mode === "adminTransactions" : false,
-    adminDatas: true ? mode === "adminDatas" : false,
-    search: true ? mode === "search" : false,
-    product: true ? mode === "product" : false,
-    buyProduct: true ? mode === "buyProduct" : false,
-    shoppingCart: true ? mode === "shoppingCart" : false,
-    publishProduct: true ? mode === "publishProduct" : false,
-    editSales: true ? mode === "editSales" : false,
-    profileSales: true ? mode === "profileSales" : false,
-    profilePurchases: true ? mode === "profilePurchases" : false,
+    home: mode === "",
+    profile: mode === "profile",
+    admin: mode === "admin",
+    adminUsers: mode === "adminUsers",
+    adminProducts: mode === "adminProducts",
+    adminTransactions: mode === "adminTransactions",
+    adminDatas: mode === "adminDatas",
+    search: mode === "search",
+    product: mode === "product",
+    buyProduct: mode === "buyProduct",
+    shoppingCart: mode === "shoppingCart",
+    publishProduct: mode === "publishProduct",
+    editSales: mode === "editSales",
+    profileSales: mode === "profileSales",
+    profilePurchases: mode === "profilePurchases",
   };
 
   useEffect(() => {
@@ -85,9 +85,14 @@ function Principal({ mode }) {
     setProductsFilter(filterProducts);
   };
 
+  const debounceRef = useRef();
+
   const handleInputChange = (value) => {
     setInput(value);
-    fetchNamesProducts(value);
+    clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      fetchNamesProducts(value);
+    }, 300);
   };
 
   const handleLogout = () => {
