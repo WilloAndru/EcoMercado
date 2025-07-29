@@ -1,48 +1,50 @@
-import axios from 'axios'
-import { useEffect, useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
-import { formatPrice } from '../../utils/formatPrice'
-import { validationCredirCard } from '../../utils/validationCreditCard'
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { formatPrice } from "../../utils/formatPrice";
+import { validateCreditCard } from "../../utils/validateCreditCard";
 
 const URI = import.meta.env.VITE_REACT_APP_API_URL;
 
 function BuyProduct() {
-
   const { type } = useParams();
-  const shoppingContext = JSON.parse(localStorage.getItem("shoppingContext"))
-  const buyNow = JSON.parse(localStorage.getItem("buyNow"))
-  const [error, setError] = useState("")
-  const [cardNumber, setCardNumber] = useState('');
-  const [expiryDate, setExpiryDate] = useState('');
+  const shoppingContext = JSON.parse(localStorage.getItem("shoppingContext"));
+  const buyNow = JSON.parse(localStorage.getItem("buyNow"));
+  const [error, setError] = useState("");
+  const [cardNumber, setCardNumber] = useState("");
+  const [expiryDate, setExpiryDate] = useState("");
   const [totalPrice, setTotalPrice] = useState(0);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   let products = type === "product" ? [buyNow] : shoppingContext;
 
   useEffect(() => {
     let totalPriceVar = 0;
-    products.forEach(p => {
+    products.forEach((p) => {
       totalPriceVar += p.price * p.quantity;
-    })
-    setTotalPrice(totalPriceVar)
-  }, [])
+    });
+    setTotalPrice(totalPriceVar);
+  }, []);
 
   const listProducts = products.map((product, i) => {
     return (
       <tr key={i}>
-        <td>{product.name} {product.quantity > 1 ? `${product.quantity} unidades` : ""}</td>
+        <td>
+          {product.name}{" "}
+          {product.quantity > 1 ? `${product.quantity} unidades` : ""}
+        </td>
         <td>{formatPrice(product.price * product.quantity)}</td>
       </tr>
-    )
-  })
+    );
+  });
 
   const handleCardNumberChange = (e) => {
-    const input = e.target.value.replace(/\s+/g, '').slice(0, 16);
-    const formattedCardNumber = input.replace(/(\d{4})(?=\d)/g, '$1 ');
+    const input = e.target.value.replace(/\s+/g, "").slice(0, 16);
+    const formattedCardNumber = input.replace(/(\d{4})(?=\d)/g, "$1 ");
     setCardNumber(formattedCardNumber);
   };
 
   const handleExpiryDateChange = (e) => {
-    let input = e.target.value.replace(/\D/g, '');
+    let input = e.target.value.replace(/\D/g, "");
 
     if (input.length >= 2) {
       input = `${input.slice(0, 2)}/${input.slice(2, 4)}`;
@@ -52,61 +54,59 @@ function BuyProduct() {
   };
 
   const handleSuccessBuy = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     const formData = new FormData(e.target);
-    const validationMessage = validationCredirCard(
-      formData.get('cardNumber'),
-      formData.get('expiryDate'),
-      formData.get('cvv'),
-      formData.get('cardHolderName')
-    )
+    const validationMessage = validateCreditCard(
+      formData.get("cardNumber"),
+      formData.get("expiryDate"),
+      formData.get("cvv"),
+      formData.get("cardHolderName")
+    );
     if (validationMessage) {
-      setError(validationMessage)
+      setError(validationMessage);
     } else {
       const handleCreateIncome = async () => {
-        const res = await axios.post(`${URI}/createIncome`,
+        const res = await axios.post(
+          `${URI}/createIncome`,
           {
-            products: products.map(p => ({
+            products: products.map((p) => ({
               productId: p.id,
               quantity: p.quantity,
-              income: (p.price * p.quantity) * 1.1
-            }))
+              income: p.price * p.quantity * 1.1,
+            })),
           },
           {
             headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`
-            }
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
           }
         );
         if (res.status === 200) {
-          products.length >= 1 ? localStorage.removeItem("shoppingContext") : null
+          products.length >= 1
+            ? localStorage.removeItem("shoppingContext")
+            : null;
           alert("Successful payment");
           navigate("/profilePurchases");
         }
-      }
+      };
       handleCreateIncome();
     }
   };
 
   return (
-    <div className='buyProduct page flex'>
-
-      <div className='flex leftConteiner '>
-
-        <span className={error ? "showMessage" : "hiddenMessage"}>
-          {error}
-        </span>
+    <div className="buyProduct page flex">
+      <div className="flex leftConteiner ">
+        <span className={error ? "showMessage" : "hiddenMessage"}>{error}</span>
 
         <form onSubmit={handleSuccessBuy}>
-
           <label>Card information</label>
-          <div className='inputConteiner'>
+          <div className="inputConteiner">
             <input
               name="cardNumber"
-              className='Input input1'
+              className="Input input1"
               value={cardNumber}
               type="text"
-              placeholder='1234 1234 1234 1234'
+              placeholder="1234 1234 1234 1234"
               onChange={handleCardNumberChange}
             />
             <div>
@@ -115,33 +115,34 @@ function BuyProduct() {
                 value={expiryDate}
                 onChange={handleExpiryDateChange}
                 type="text"
-                placeholder='MM/AA'
+                placeholder="MM/AA"
               />
               <input
                 name="cvv"
-                className='input2'
+                className="input2"
                 type="text"
-                placeholder='CVV' />
+                placeholder="CVV"
+              />
             </div>
           </div>
 
           <label>Owner's name</label>
-          <div className='inputConteiner'>
+          <div className="inputConteiner">
             <input
               name="cardHolderName"
-              className='Input'
+              className="Input"
               type="text"
-              placeholder='Full name' />
+              placeholder="Full name"
+            />
           </div>
 
-          <button className='btn' type='submit'>Buy</button>
-
+          <button className="btn" type="submit">
+            Buy
+          </button>
         </form>
-
       </div>
 
       <table>
-
         <thead>
           <tr>
             <th>Items</th>
@@ -160,11 +161,9 @@ function BuyProduct() {
             <th>{formatPrice(totalPrice * 1.1)}</th>
           </tr>
         </tbody>
-
       </table>
-
     </div>
-  )
+  );
 }
 
-export default BuyProduct
+export default BuyProduct;
