@@ -1,13 +1,12 @@
-import { useState } from 'react'
-import { formatPrice } from '../utils/formatPrice'
-import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
-import { arrivalDays } from '../utils/arrivalDays'
+import { useState } from "react";
+import { formatPrice } from "../utils/formatPrice";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { arrivalDays } from "../utils/arrivalDays";
 
 const URI = import.meta.env.VITE_REACT_APP_API_URL;
 
 function ListProducts({ mode, listProducts, listTransactions }) {
-
   const productsForPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
@@ -15,42 +14,44 @@ function ListProducts({ mode, listProducts, listTransactions }) {
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
     window.scrollTo(0, 0);
-  }
+  };
 
   const deleteProductShoppingCart = (id) => {
     const shoppingList = JSON.parse(localStorage.getItem("shoppingContext"));
     if (shoppingList.length > 1) {
-      const updatedList = shoppingList.filter(i => i.id !== String(id))
-      localStorage.setItem('shoppingContext', JSON.stringify(updatedList));
-      window.location.reload()
+      const updatedList = shoppingList.filter((i) => i.id !== String(id));
+      localStorage.setItem("shoppingContext", JSON.stringify(updatedList));
+      window.location.reload();
     } else {
-      localStorage.removeItem("shoppingContext")
-      navigate("/")
+      localStorage.removeItem("shoppingContext");
+      navigate("/");
     }
-  }
+  };
 
   const filterQuantity = (id) => {
     if (mode === "purchases" || mode === "sold") {
-      const product = listTransactions.filter(t => t.productId === id)
+      const product = listTransactions.filter((t) => t.productId === id);
       return product[0].quantity;
     } else if (mode === "shoppingCart") {
       const shoppingList = JSON.parse(localStorage.getItem("shoppingContext"));
-      const product = shoppingList.filter(i => i.id === String(id))
+      const product = shoppingList.filter((i) => i.id === String(id));
       return product[0].quantity;
     }
-  }
+  };
 
   const setStatePurchases = (id) => {
-    let transaction = listTransactions.filter(t => t.productId === id)
-    transaction = transaction[0].createdAt
-    return arrivalDays(transaction)
-  }
+    let transaction = listTransactions.filter((t) => t.productId === id);
+    transaction = transaction[0].createdAt;
+    return arrivalDays(transaction);
+  };
 
   const deleteProduct = (id) => {
-    const confirmed = window.confirm("Are you sure you want to delete the product?")
+    const confirmed = window.confirm(
+      "Are you sure you want to delete the product?"
+    );
     if (confirmed) {
       const deleteProduct = async () => {
-        const res = await axios.delete(`${URI}/deleteProduct/${id}`)
+        const res = await axios.delete(`${URI}/deleteProduct/${id}`);
         if (res.status === 200) {
           alert("Product deleted");
           window.location.reload();
@@ -58,79 +59,100 @@ function ListProducts({ mode, listProducts, listTransactions }) {
       };
       deleteProduct();
     }
-  }
+  };
 
-  const ListProducts = (listProducts
+  const ListProducts = listProducts
     .slice((currentPage - 1) * productsForPage, currentPage * productsForPage)
-    .map(p => {
-      const blob = new Blob([new Uint8Array(p.image.data)], { type: 'image/jpeg' });
-      const imageUrl = URL.createObjectURL(blob);
+    .map((p) => {
       return (
         <div
           key={p.id}
-          className={mode ? 'flex productComp1' : 'flex productComp2'}
-          onClick={() => !mode ? navigate(`/product/${p.id}`) : null}
+          className={mode ? "flex productComp1" : "flex productComp2"}
+          onClick={() => (!mode ? navigate(`/product/${p.id}`) : null)}
         >
+          <div className="flex">
+            <img src={p.image} alt="img" />
 
-          <div className='flex'>
-
-            <img src={imageUrl} alt='img' />
-
-            <div className='flex div'>
-
+            <div className="flex div">
               <h2>{p.name}</h2>
 
               {(!mode || mode === "sales") && <h3>{formatPrice(p.price)}</h3>}
-              {mode === "shoppingCart" && <h3>{formatPrice(p.price * filterQuantity(p.id))}</h3>}
-              {mode === "purchases" && <h3>Total Paid: {formatPrice(1.1 * p.price * filterQuantity(p.id))}</h3>}
-              {mode === "sold" && <h3>Revenue: {formatPrice(p.price * filterQuantity(p.id))}</h3>}
+              {mode === "shoppingCart" && (
+                <h3>{formatPrice(p.price * filterQuantity(p.id))}</h3>
+              )}
+              {mode === "purchases" && (
+                <h3>
+                  Total Paid:{" "}
+                  {formatPrice(1.1 * p.price * filterQuantity(p.id))}
+                </h3>
+              )}
+              {mode === "sold" && (
+                <h3>Revenue: {formatPrice(p.price * filterQuantity(p.id))}</h3>
+              )}
 
-              {mode === "shoppingCart" && <h4>Units: {filterQuantity(p.id)}</h4>}
-              {mode === "purchases" && <h4>Units Purchased: {filterQuantity(p.id)}</h4>}
+              {mode === "shoppingCart" && (
+                <h4>Units: {filterQuantity(p.id)}</h4>
+              )}
+              {mode === "purchases" && (
+                <h4>Units Purchased: {filterQuantity(p.id)}</h4>
+              )}
               {mode === "sales" && <h4>Available Units: {p.quantity}</h4>}
               {mode === "sold" && <h4>Units Sold: {filterQuantity(p.id)}</h4>}
 
               {mode === "purchases" && <h4>{setStatePurchases(p.id)}</h4>}
-
             </div>
-
           </div>
 
-          <div className='flex div'>
-            {mode === "shoppingCart" && <button className="red" onClick={() => deleteProductShoppingCart(p.id)}>Remove</button>}
-            {mode === "sales" && <button onClick={() => navigate(`/publishProduct/${p.id}`)}>Edit</button>}
-            {mode === "sales" && <button className="red" onClick={() => deleteProduct(p.id)}>Delete</button>}
+          <div className="flex div">
+            {mode === "shoppingCart" && (
+              <button
+                className="red"
+                onClick={() => deleteProductShoppingCart(p.id)}
+              >
+                Remove
+              </button>
+            )}
+            {mode === "sales" && (
+              <button onClick={() => navigate(`/publishProduct/${p.id}`)}>
+                Edit
+              </button>
+            )}
+            {mode === "sales" && (
+              <button className="red" onClick={() => deleteProduct(p.id)}>
+                Delete
+              </button>
+            )}
           </div>
-
         </div>
-      )
-    }))
+      );
+    });
 
-  const listBtnPages = Array.from({ length: Math.ceil(listProducts.length / productsForPage) }, (_, i) => {
-    const isDisabled = currentPage === i + 1;
-    return (
-      <button
-        key={i}
-        className={`btn ${isDisabled ? 'disabled' : ''}`}
-        onClick={() => handlePageChange(i + 1)}
-        disabled={isDisabled}
-      >
-        {i + 1}
-      </button>
-    );
-  });
+  const listBtnPages = Array.from(
+    { length: Math.ceil(listProducts.length / productsForPage) },
+    (_, i) => {
+      const isDisabled = currentPage === i + 1;
+      return (
+        <button
+          key={i}
+          className={`btn ${isDisabled ? "disabled" : ""}`}
+          onClick={() => handlePageChange(i + 1)}
+          disabled={isDisabled}
+        >
+          {i + 1}
+        </button>
+      );
+    }
+  );
 
   return (
-    <div className='listProducts flex'>
+    <div className="listProducts flex">
+      <div className="flex div1">{ListProducts}</div>
 
-      <div className='flex div1'>{ListProducts}</div>
-
-      {listProducts.length > productsForPage &&
-        <div className='div2 flex'>{listBtnPages}</div>
-      }
-
+      {listProducts.length > productsForPage && (
+        <div className="div2 flex">{listBtnPages}</div>
+      )}
     </div>
-  )
+  );
 }
 
-export default ListProducts
+export default ListProducts;

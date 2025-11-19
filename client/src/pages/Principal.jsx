@@ -33,6 +33,7 @@ function Principal({ mode }) {
   const navigate = useNavigate();
   const blurTimeout = useRef(null);
 
+  // Manejo de estados para rediriguir a las distintas rutas
   let modeStatus = {
     home: mode === "",
     profile: mode === "profile",
@@ -120,6 +121,7 @@ function Principal({ mode }) {
 
   return (
     <div className="principal flex">
+      {/* Header */}
       <header className="flex">
         <Link
           to={user && user.role === "admin" ? "/admin" : "/"}
@@ -235,6 +237,7 @@ function Principal({ mode }) {
 
       {modeStatus.profilePurchases && <ProfilePurchases />}
 
+      {/* Footer */}
       {(!user || user.role === "client") && (
         <footer className="flex">
           <p>Copyright © {new Date().getFullYear()} Country Ltd.</p>
