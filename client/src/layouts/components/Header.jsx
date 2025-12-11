@@ -1,4 +1,59 @@
-function Header() {
+import { useRef, useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { IoIosSearch } from "react-icons/io";
+import { TiShoppingCart } from "react-icons/ti";
+
+function Header({ user }) {
+  const shoppingContext = JSON.parse(localStorage.getItem("shoppingContext"));
+  const [showOptionsUser, setShowOptionsUser] = useState(false);
+  const [input, setInput] = useState("");
+  const [showProducts, setShowProducts] = useState(false);
+  const [productsIdNames] = useState([]);
+  const [productsFilter, setProductsFilter] = useState([]);
+  const navigate = useNavigate();
+  const blurTimeout = useRef(null);
+
+  const fetchNamesProducts = async (value) => {
+    const valueMin = value.toLowerCase();
+    const filterProducts = productsIdNames.filter((p) =>
+      p.name.toLowerCase().includes(valueMin)
+    );
+    setProductsFilter(filterProducts);
+  };
+
+  const debounceRef = useRef();
+
+  const handleInputChange = (value) => {
+    setInput(value);
+    clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      fetchNamesProducts(value);
+    }, 300);
+  };
+
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate("/");
+    window.location.reload();
+  };
+
+  const handleInputBlur = () => {
+    blurTimeout.current = setTimeout(() => {
+      setShowProducts(false);
+    }, 500);
+  };
+
+  const goSearchInterface = async (e) => {
+    e.preventDefault();
+    input
+      ? localStorage.setItem("valueInput", input)
+      : localStorage.removeItem("valueInput");
+    if (input || localStorage.getItem("valueInput")) {
+      setShowProducts(false);
+      window.location.href = "/search";
+    }
+  };
+
   return (
     <header className="flex">
       <Link

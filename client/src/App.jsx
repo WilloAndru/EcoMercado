@@ -1,86 +1,67 @@
 import "./App.scss";
-import { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import MainLayout from "./layouts/MainLayout";
-import AuthLayout from "./layouts/AuthLayout";
+import { Suspense, lazy } from "react";
 
-const Principal = lazy(() => import("./pages/Principal"));
-const AuthLogin = lazy(() => import("./pages/auth/AuthLogin"));
+import Home from "./pages/home/Home";
+import Profile from "./pages/userOptions/Profile";
+import Admin from "./pages/admin/Admin";
+import AdminUsers from "./pages/admin/AdminUsers";
+import AdminProducts from "./pages/admin/AdminProducts";
+import AdminTransactions from "./pages/admin/AdminTransactions";
+import AdminDatas from "./pages/admin/AdminDatas";
+import Search from "./pages/purchase/Search";
+import ViewProduct from "./pages/purchase/ViewProduct";
+import BuyProduct from "./pages/purchase/BuyProduct";
+import ShoppingCart from "./pages/purchase/ShoppingCart";
+import PublishProduct from "./pages/userOptions/PublishProduct";
+import ProfilePurchases from "./pages/userOptions/ProfilePurchases";
+import EditSales from "./pages/userOptions/EditSales";
+import ProfileSales from "./pages/userOptions/ProfileSales";
+import AuthLogin from "./pages/auth/AuthLogin";
+
+// Layouts
+const MainLayout = lazy(() => import("./layouts/MainLayout"));
+const AuthLayout = lazy(() => import("./layouts/AuthLayout"));
 
 function App() {
   return (
     <Router>
-      <Suspense>
+      <Suspense fallback={<div>Loading...</div>}>
         <Routes>
           {/* Rutas con Header y Footer */}
           <Route element={<MainLayout />}>
             <Route path="/" element={<Home />} />
+            <Route path="/profile" element={<Profile />} />
 
             <Route path="/admin" element={<Admin />} />
             <Route path="/admin/users" element={<AdminUsers />} />
             <Route path="/admin/products" element={<AdminProducts />} />
+            <Route path="/admin/transactions" element={<AdminTransactions />} />
+            <Route path="/admin/datas" element={<AdminDatas />} />
 
-            <Route path="/profile" element={<Profile />} />
             <Route path="/search" element={<Search />} />
-            <Route path="/product/:id" element={<ProductDetail />} />
+            <Route path="/product/:id" element={<ViewProduct />} />
+            <Route path="/buyProduct/:type" element={<BuyProduct />} />
+
             <Route path="/shoppingCart" element={<ShoppingCart />} />
+            <Route path="/publishProduct/:id" element={<PublishProduct />} />
+            <Route path="/editSales" element={<EditSales />} />
+            <Route path="/profileSales" element={<ProfileSales />} />
+            <Route path="/profilePurchases" element={<ProfilePurchases />} />
           </Route>
+
           {/* Rutas sin Header ni Footer */}
           <Route element={<AuthLayout />}>
-            <Route path="/login" element={<Login />} />
-            <Route path="/enterEmail" element={<EnterEmail />} />
-            <Route path="/codeVerification" element={<CodeVerification />} />
+            <Route path="/login" element={<AuthLogin mode="default" />} />
+            <Route
+              path="/enterEmail"
+              element={<AuthLogin mode="enterEmail" />}
+            />
+            <Route
+              path="/codeVerification"
+              element={<AuthLogin mode="codeVerification" />}
+            />
           </Route>
-          <Route path="/" element={<Principal mode="" />} />
-          <Route path="/admin" element={<Principal mode="admin" />} />
-          <Route
-            path="/admin/users"
-            element={<Principal mode="adminUsers" />}
-          />
-          <Route
-            path="/admin/products"
-            element={<Principal mode="adminProducts" />}
-          />
-          <Route
-            path="/admin/transactions"
-            element={<Principal mode="adminTransactions" />}
-          />
-          <Route
-            path="/admin/datas"
-            element={<Principal mode="adminDatas" />}
-          />
-          <Route path="/profile" element={<Principal mode="profile" />} />
-          <Route path="/search" element={<Principal mode="search" />} />
-          <Route path="/product/:id" element={<Principal mode="product" />} />
-          <Route
-            path="/buyProduct/:type"
-            element={<Principal mode="buyProduct" />}
-          />
-          <Route
-            path="/shoppingCart"
-            element={<Principal mode="shoppingCart" />}
-          />
-          <Route
-            path="/publishProduct/:idProduct"
-            element={<Principal mode="publishProduct" />}
-          />
-          <Route path="/editSales" element={<Principal mode="editSales" />} />
-          <Route
-            path="/profileSales"
-            element={<Principal mode="profileSales" />}
-          />
-          <Route
-            path="/profilePurchases"
-            element={<Principal mode="profilePurchases" />}
-          />
-
-          {/* Layout sin header ni footer */}
-          <Route path="/login" element={<AuthLogin mode="default" />} />
-          <Route path="/enterEmail" element={<AuthLogin mode="enterEmail" />} />
-          <Route
-            path="/codeVerification"
-            element={<AuthLogin mode="codeVerification" />}
-          />
         </Routes>
       </Suspense>
     </Router>

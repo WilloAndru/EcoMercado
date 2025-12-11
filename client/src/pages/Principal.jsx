@@ -32,51 +32,6 @@ function Principal({ mode }) {
   const navigate = useNavigate();
   const blurTimeout = useRef(null);
 
-  // Manejo de estados para rediriguir a las distintas rutas
-  let modeStatus = {
-    home: mode === "",
-    profile: mode === "profile",
-    admin: mode === "admin",
-    adminUsers: mode === "adminUsers",
-    adminProducts: mode === "adminProducts",
-    adminTransactions: mode === "adminTransactions",
-    adminDatas: mode === "adminDatas",
-    search: mode === "search",
-    product: mode === "product",
-    buyProduct: mode === "buyProduct",
-    shoppingCart: mode === "shoppingCart",
-    publishProduct: mode === "publishProduct",
-    editSales: mode === "editSales",
-    profileSales: mode === "profileSales",
-    profilePurchases: mode === "profilePurchases",
-  };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const token = localStorage.getItem("token");
-      if (token) {
-        try {
-          const response = await axios.get(`${URL}/getUserDatas`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-          setUser(response.data);
-          localStorage.setItem("saveEmail", response.data.email);
-        } catch (error) {
-          localStorage.removeItem("token");
-        }
-      }
-      if (!modeStatus.admin) {
-        const response = await axios.get(`${URL}/productsIdNames`);
-        if (response.status === 200) {
-          setProductsIdNames(response.data);
-        }
-      }
-    };
-    fetchData();
-  }, []);
-
   const fetchNamesProducts = async (value) => {
     const valueMin = value.toLowerCase();
     const filterProducts = productsIdNames.filter((p) =>

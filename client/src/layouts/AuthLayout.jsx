@@ -1,7 +1,9 @@
-import React from "react";
+import { Outlet } from "react-router-dom";
 
-function AuthLayout() {
-  return <div>AuthLayout</div>;
-}
+const AuthLayout = () => (
+  <main className="loginPage flex">
+    <Outlet />
+  </main>
+);
 
 export default AuthLayout;
