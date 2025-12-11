@@ -3,7 +3,6 @@ import SliderContainer from "../../components/SliderContainer";
 import axios from "axios";
 
 const URI = import.meta.env.VITE_REACT_APP_API_URL;
-const COMPANY = import.meta.env.VITE_YOUR_COMPANY;
 
 function Home() {
   const [bestSellers, setBestSellers] = useState([]);
@@ -35,7 +34,7 @@ function Home() {
 
   return (
     <div className="page home flex">
-      <h1>Buy and Sell Sustainable Products on {COMPANY}</h1>
+      <h1>Buy and Sell Sustainable Products on EcoMercado</h1>
 
       <SliderContainer
         className="category"

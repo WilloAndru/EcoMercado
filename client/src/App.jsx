@@ -1,6 +1,8 @@
 import "./App.scss";
 import { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import MainLayout from "./layouts/MainLayout";
+import AuthLayout from "./layouts/AuthLayout";
 
 const Principal = lazy(() => import("./pages/Principal"));
 const AuthLogin = lazy(() => import("./pages/auth/AuthLogin"));
@@ -10,7 +12,25 @@ function App() {
     <Router>
       <Suspense>
         <Routes>
-          {/* Layout con header y footer */}
+          {/* Rutas con Header y Footer */}
+          <Route element={<MainLayout />}>
+            <Route path="/" element={<Home />} />
+
+            <Route path="/admin" element={<Admin />} />
+            <Route path="/admin/users" element={<AdminUsers />} />
+            <Route path="/admin/products" element={<AdminProducts />} />
+
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/search" element={<Search />} />
+            <Route path="/product/:id" element={<ProductDetail />} />
+            <Route path="/shoppingCart" element={<ShoppingCart />} />
+          </Route>
+          {/* Rutas sin Header ni Footer */}
+          <Route element={<AuthLayout />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/enterEmail" element={<EnterEmail />} />
+            <Route path="/codeVerification" element={<CodeVerification />} />
+          </Route>
           <Route path="/" element={<Principal mode="" />} />
           <Route path="/admin" element={<Principal mode="admin" />} />
           <Route

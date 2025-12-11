@@ -20,7 +20,6 @@ import EditSales from "./userOptions/EditSales";
 import ProfileSales from "./userOptions/ProfileSales";
 
 const URL = import.meta.env.VITE_REACT_APP_API_URL;
-const COMPANY = import.meta.env.VITE_YOUR_COMPANY;
 
 function Principal({ mode }) {
   const shoppingContext = JSON.parse(localStorage.getItem("shoppingContext"));
@@ -127,8 +126,8 @@ function Principal({ mode }) {
           to={user && user.role === "admin" ? "/admin" : "/"}
           className="flex principalBtn"
         >
-          <img className="logo" src="/eco.png" alt="Icon" />
-          <h1>{COMPANY}</h1>
+          <img className="logo" src="/icon.png" alt="Icon" />
+          <h1>EcoMercado</h1>
         </Link>
 
         <div className="flex searchBar">
