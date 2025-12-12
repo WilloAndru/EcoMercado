@@ -35,36 +35,46 @@ export const getUserDatas = async (req, res) => {
 
 export const registerGoogle = async (req, res) => {
   const { token } = req.body;
+
+  // Validacion basica de token recibido
+  if (!token) {
+    return res.status(400).json({ message: "Missing Google credential." });
+  }
+
   try {
+    // Verificamos el token y extraemos el email
     const ticket = await client.verifyIdToken({
       idToken: token,
       audience: GOOGLE_CLIENT_ID,
     });
+    const payload = ticket.getPayload();
+    if (!payload?.email) {
+      return res.status(400).json({ message: "Google token has no email." });
+    }
+    const email = payload.email;
 
-    const { email } = ticket.getPayload();
     let user = await UserModel.findOne({ where: { email } });
 
-    if (user) {
-      const Token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
-        expiresIn: "24h",
-      });
-      res.status(200).json({ token: Token, userRole: user.role });
-    } else {
+    // Si el usuario no existe registra un nuevo usario en la db
+    if (!user) {
       const randomPassword = crypto.randomBytes(8).toString("hex");
       const hashedPassword = await bcrypt.hash(randomPassword, 8);
       user = await UserModel.create({
         email: email,
-        password: hashedPassword,
+        password: null,
+        googleId: 
         address: "",
         phone: "",
       });
-      const Token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
-        expiresIn: "24h",
-      });
-      res.status(200).json({ token: Token, userRole: user.role });
     }
+
+    // Creamos token para el front y enviamos
+    const jwtToken = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
+      expiresIn: "24h",
+    });
+    res.status(200).json({ token: jwtToken, userRole: user.role });
   } catch (error) {
-    console.error("❌ Error en registerGoogle:", error);
+    console.error("Error:", error);
     res.status(500).json({ message: error.message });
   }
 };

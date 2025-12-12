@@ -1,62 +1,79 @@
 import { useState } from "react";
-import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+import axios from "axios";
 
 const URL = import.meta.env.VITE_REACT_APP_API_URL;
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 function AuthLogin() {
-  const [message, setMessage] = useState("");
+  const [error, setError] = useState(""); // Error que se le mostrara al usuario
+  const navigate = useNavigate();
 
-  const handleLoginGoogle = async (jwt) => {
-    const token = jwt.credential;
-    const res = await axios.post(`${URL}/registerGoogle`, { token });
-    if (res.status === 200) {
-      localStorage.setItem("token", res.data.token);
-      res.data.userRole === "client" ? navigate("/") : navigate("/admin");
+  // Funcion que maneja el inicio de sesion o registro
+  const handleLoginGoogle = async ({ credential }) => {
+    try {
+      // Si OAuth 2.0 devulve un token vacio
+      if (!credential) throw new Error("Credentials empty.");
+
+      const res = await axios.post(`${URL}/registerGoogle`, {
+        token: credential,
+      });
+
+      if (res.data.token) {
+        localStorage.setItem("token", res.data.token);
+        // Redirigimos al panel de client o admin
+        const role = res.data.userRole;
+        navigate(role === "client" ? "/" : "/admin");
+        return;
+      }
+
+      // Si el server responde con algo que no es un token
+      throw new Error("Invalid server response.");
+    } catch (error) {
+      console.error("Error:", error);
+      setError(error);
     }
   };
 
   return (
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
       <div className="container flex">
+        {/* Seccion izquierda */}
         <div className="leftDiv flex">
-          <Link className="headerDiv flex" to={"/"}>
+          {/* Marca */}
+          <Link className="headerDiv flex" to="/">
             <img src="icon.png" alt="Icon" />
             <h1>EcoMercado</h1>
           </Link>
-
+          {/* Texto */}
           <div className="textDiv flex">
             <h1>Buy and Sell Extraordinary Items</h1>
             <p>Embrace the New Generation of Sustainable Products</p>
           </div>
         </div>
-
+        {/* Seccion derecha */}
         <form className="flex">
+          {/* Titulo */}
           <div className="div1 flex">
-            <h2>Log In or Sign Up</h2>
+            <h2>Login or Sign Up</h2>
             <p>Use your email or another service to access EcoMercado.</p>
           </div>
-
-          <span className={message ? "showMessage" : "hiddenMessage"}>
-            {message}
-          </span>
-
+          {/* Mensaje de error */}
+          <span className={error ? "showerror" : "hiddenerror"}>{error}</span>
+          {/* Boton de google */}
           <GoogleLogin
-            onSuccess={(jwt) => {
-              handleLoginGoogle(jwt);
-            }}
+            onSuccess={handleLoginGoogle}
             onError={(error) => {
               console.log("Login Failed", error);
-              setMessage(error);
+              setError(error);
             }}
           />
-
-          <label>
+          {/* Terminos y condiciones */}
+          <p>
             By continuing, you agree to EcoMercado's Terms and Conditions of
-            Use.
-          </label>
+            use.
+          </p>
         </form>
       </div>
     </GoogleOAuthProvider>
