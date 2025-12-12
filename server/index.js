@@ -6,17 +6,17 @@ import { authMiddleware } from "./middleware/authMiddleware.js";
 
 const app = express();
 
-app.use(cors({ origin: '*' }));
+app.use(cors({ origin: "*", credentials: true }));
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.json({ status: "ok", message: "EcoMercado API running 🚀" });
+  res.json({ status: "ok", message: "EcoMercado API running" });
 });
 
 app.use("/api", router);
 
-app.get('/api/protected', authMiddleware, (req, res) => {
-  res.status(200).json({ message: 'Acceso concedido a contenido protegido' });
+app.get("/api/protected", authMiddleware, (req, res) => {
+  res.status(200).json({ message: "Acceso concedido a contenido protegido" });
 });
 
 try {
