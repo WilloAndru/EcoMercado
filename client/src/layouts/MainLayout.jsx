@@ -21,16 +21,13 @@ function MainLayout() {
           });
           setUser(response.data);
           localStorage.setItem("saveEmail", response.data.email);
-          const response2 = await axios.get(`${URL}/productsIdNames`);
-          if (response2.status === 200) {
-            setProductsIdNames(response.data);
-          }
         } catch (error) {
-          localStorage.removeItem("token");
+          console.log(error);
         }
       }
     };
     fetchData();
+    console.log(localStorage.getItem("token"));
   }, []);
 
   return (
