@@ -99,7 +99,7 @@ function Header({ user }) {
             onMouseEnter={() => setShowOptionsUser(true)}
             onMouseLeave={() => setShowOptionsUser(false)}
           >
-            {user.email}
+            {user.name}
           </button>
         ) : (
           <Link className="btn btnLogin" to="/login">

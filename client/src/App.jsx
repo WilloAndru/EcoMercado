@@ -49,12 +49,7 @@ function App() {
 
         {/* Rutas sin Header ni Footer */}
         <Route element={<AuthLayout />}>
-          <Route path="/login" element={<AuthLogin mode="default" />} />
-          <Route path="/enterEmail" element={<AuthLogin mode="enterEmail" />} />
-          <Route
-            path="/codeVerification"
-            element={<AuthLogin mode="codeVerification" />}
-          />
+          <Route path="/login" element={<AuthLogin />} />
         </Route>
       </Routes>
     </Router>

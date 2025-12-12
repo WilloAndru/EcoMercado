@@ -5,7 +5,7 @@ const UserModel = db.define("users", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   role: { type: DataTypes.ENUM("client", "admin"), defaultValue: "client" },
   email: { type: DataTypes.STRING },
-  password: { type: DataTypes.STRING },
+  password: { type: DataTypes.STRING, allowNull: true },
   googleId: { type: DataTypes.STRING, allowNull: true },
   name: { type: DataTypes.STRING, allowNull: true },
   picture: { type: DataTypes.STRING, allowNull: true },

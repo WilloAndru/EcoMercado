@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+import { useNavigate } from "react-router-dom";
+import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import axios from "axios";
 
 const URL = import.meta.env.VITE_REACT_APP_API_URL;
@@ -38,44 +38,29 @@ function AuthLogin() {
 
   return (
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-      <div className="container flex">
-        {/* Seccion izquierda */}
-        <div className="leftDiv flex">
-          {/* Marca */}
-          <Link className="headerDiv flex" to="/">
-            <img src="icon.png" alt="Icon" />
-            <h1>EcoMercado</h1>
-          </Link>
-          {/* Texto */}
-          <div className="textDiv flex">
-            <h1>Buy and Sell Extraordinary Items</h1>
-            <p>Embrace the New Generation of Sustainable Products</p>
-          </div>
+      <form className="flex">
+        {/* Titulo */}
+        <div className="div1 flex">
+          <h2>Login or Sign Up</h2>
+          <p>Use your email or another service to access EcoMercado.</p>
         </div>
-        {/* Seccion derecha */}
-        <form className="flex">
-          {/* Titulo */}
-          <div className="div1 flex">
-            <h2>Login or Sign Up</h2>
-            <p>Use your email or another service to access EcoMercado.</p>
-          </div>
-          {/* Mensaje de error */}
+        {/* Mensaje de error */}
+        {error && (
           <span className={error ? "showerror" : "hiddenerror"}>{error}</span>
-          {/* Boton de google */}
-          <GoogleLogin
-            onSuccess={handleLoginGoogle}
-            onError={(error) => {
-              console.log("Login Failed", error);
-              setError(error);
-            }}
-          />
-          {/* Terminos y condiciones */}
-          <p>
-            By continuing, you agree to EcoMercado's Terms and Conditions of
-            use.
-          </p>
-        </form>
-      </div>
+        )}
+        {/* Boton de google */}
+        <GoogleLogin
+          onSuccess={handleLoginGoogle}
+          onError={(error) => {
+            console.log("Login Failed", error);
+            setError(error);
+          }}
+        />
+        {/* Terminos y condiciones */}
+        <p>
+          By continuing, you agree to EcoMercado's Terms and Conditions of use.
+        </p>
+      </form>
     </GoogleOAuthProvider>
   );
 }

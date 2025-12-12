@@ -1,14 +1,10 @@
 import UserModel from "../models/userModel.js";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
-import crypto from "crypto";
 import { OAuth2Client } from "google-auth-library";
-import sendResetEmail from "../utils/sendResetEmail.js";
 
 dotenv.config();
-const GOOGLE_CLIENT_ID =
-  "350518038891-ng6gtlroqcb9f802eisp5adorqskgrfr.apps.googleusercontent.com";
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const client = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 export const getAllUsers = async (req, res) => {
@@ -33,6 +29,7 @@ export const getUserDatas = async (req, res) => {
   }
 };
 
+// Endpoint de login o registro con google
 export const registerGoogle = async (req, res) => {
   const { token } = req.body;
 
@@ -42,39 +39,32 @@ export const registerGoogle = async (req, res) => {
   }
 
   try {
-    // Verificamos el token y extraemos el email
+    // Verificamos el token y extraemos el payload
     const ticket = await client.verifyIdToken({
       idToken: token,
       audience: GOOGLE_CLIENT_ID,
     });
     const payload = ticket.getPayload();
-    if (!payload?.email) {
-      return res.status(400).json({ message: "Google token has no email." });
-    }
-    const email = payload.email;
 
-    let user = await UserModel.findOne({ where: { email } });
+    let user = await UserModel.findOne({ where: { googleId: payload.sub } });
 
-    // Si el usuario no existe registra un nuevo usario en la db
+    // Si el usuario no existe creamos un nuevo usuario
     if (!user) {
-      const randomPassword = crypto.randomBytes(8).toString("hex");
-      const hashedPassword = await bcrypt.hash(randomPassword, 8);
       user = await UserModel.create({
-        email: email,
-        password: null,
-        googleId: 
-        address: "",
-        phone: "",
+        email: payload.email,
+        googleId: payload.sub,
+        name: payload.name,
+        picture: payload.picture,
       });
     }
 
-    // Creamos token para el front y enviamos
+    // Creamos el token para el front y enviamos
     const jwtToken = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
       expiresIn: "24h",
     });
     res.status(200).json({ token: jwtToken, userRole: user.role });
   } catch (error) {
-    console.error("Error:", error);
+    console.error(error);
     res.status(500).json({ message: error.message });
   }
 };
@@ -118,67 +108,6 @@ export const getUsersCount = async (req, res) => {
   try {
     const usersCount = await UserModel.count();
     res.status(200).json(usersCount);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-export const sendEmail = async (req, res) => {
-  try {
-    const { email } = req.body;
-    console.log("📩 Petición de reset password para:", email);
-
-    const user = await UserModel.findOne({ where: { email } });
-    if (!user) {
-      console.log("❌ Usuario no encontrado");
-      return res.status(404).json({ message: "Unregistered user" });
-    }
-
-    const code = Math.floor(100000 + Math.random() * 900000).toString();
-    const expires = new Date(Date.now() + 5 * 60 * 1000);
-
-    await user.update({
-      resetCode: code,
-      resetCodeExpires: expires,
-    });
-
-    console.log("✅ Código generado:", code);
-    await sendResetEmail(user.email, code);
-
-    res.status(200).json("Codigo Enviado");
-  } catch (error) {
-    console.error("❌ Error en sendEmail:", error);
-    res.status(500).json({ message: error.message });
-  }
-};
-
-export const validateCode = async (req, res) => {
-  const { email, code } = req.body;
-
-  try {
-    const user = await UserModel.findOne({ where: { email } });
-
-    if (!user) {
-      return res.status(404).json({ message: "Unregistered user" });
-    }
-
-    const now = new Date();
-
-    const isCodeValid =
-      user.resetCode === code && new Date(user.resetCodeExpires) > now;
-
-    if (!isCodeValid) {
-      return res.status(400).json({ message: "Invalid or expired code" });
-    }
-
-    user.resetCode = null;
-    user.resetCodeExpires = null;
-    await user.save();
-
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
-      expiresIn: "24h",
-    });
-    res.status(200).json({ token: token, userRole: user.role });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
