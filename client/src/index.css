@@ -7,6 +7,18 @@
   --color-fg: #3d3d3d;
 }
 
+button {
+  @apply cursor-pointer;
+}
+
+input {
+  @apply focus:outline-0 px-5 py-3 bg-bg;
+}
+
+.btn-1 {
+  @apply text-white px-5 py-3 hover:bg-hover border border-bg rounded-full;
+}
+
 h1,
 h2,
 h3,

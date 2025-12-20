@@ -55,20 +55,25 @@ function Header({ user }) {
   };
 
   return (
-    <header className="flex1">
+    <header className="flex w-full justify-around items-center fixed bg-primary z-10 h-25 px-5">
+      {/* Marca */}
       <Link
         to={user && user.role === "admin" ? "/admin" : "/"}
-        className="flex1 principalBtn"
+        className="flex gap-2 items-center text-white"
       >
-        <img className="logo" src="/icon.png" alt="Icon" />
-        <h1>EcoMercado</h1>
+        <img className="w-15" src="/icon.png" alt="Icon" />
+        <h1 className="hidden md:flex">EcoMercado</h1>
       </Link>
-
-      <div className="flex1 searchBar">
+      {/* Barra de busqueda */}
+      <section className="flex">
+        {/* Form de busqueda */}
         {(!user || user.role === "client") && (
-          <form className="flex1" onSubmit={goSearchInterface}>
+          <form
+            className="flex border border-bg rounded-full h-fit overflow-hidden"
+            onSubmit={goSearchInterface}
+          >
+            {/* Input */}
             <input
-              className="input"
               type="text"
               placeholder="Search for what you want"
               value={input}
@@ -76,11 +81,16 @@ function Header({ user }) {
               onFocus={() => setShowProducts(true)}
               onBlur={handleInputBlur}
             />
-            <button type="submit" className="flex1">
-              <IoIosSearch className="icon" />
+            {/* Boton de buscar */}
+            <button
+              type="submit"
+              className="text-white px-5 py-3 hover:bg-hover"
+            >
+              <IoIosSearch className="text-2xl" />
             </button>
           </form>
         )}
+        {/* Recomendaciones de busqueda */}
         {showProducts && (
           <div className="suggestContainer flex1">
             {productsFilter.slice(0, 10).map((product, id) => (
@@ -90,18 +100,20 @@ function Header({ user }) {
             ))}
           </div>
         )}
-      </div>
-
-      <div className="flex1">
+      </section>
+      {/* Boton de login o opciones de usuario */}
+      <div className="flex">
         {user ? (
+          // Boton de opciones de usuario
           <button
-            className="btn btnLogin"
+            className="btn-1"
             onMouseEnter={() => setShowOptionsUser(true)}
             onMouseLeave={() => setShowOptionsUser(false)}
           >
             {user.name}
           </button>
         ) : (
+          // Boton de auth
           <Link className="btn btnLogin" to="/login">
             Log in or register
           </Link>
