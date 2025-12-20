@@ -55,18 +55,18 @@ function Header({ user }) {
   };
 
   return (
-    <header className="flex">
+    <header className="flex1">
       <Link
         to={user && user.role === "admin" ? "/admin" : "/"}
-        className="flex principalBtn"
+        className="flex1 principalBtn"
       >
         <img className="logo" src="/icon.png" alt="Icon" />
         <h1>EcoMercado</h1>
       </Link>
 
-      <div className="flex searchBar">
+      <div className="flex1 searchBar">
         {(!user || user.role === "client") && (
-          <form className="flex" onSubmit={goSearchInterface}>
+          <form className="flex1" onSubmit={goSearchInterface}>
             <input
               className="input"
               type="text"
@@ -76,13 +76,13 @@ function Header({ user }) {
               onFocus={() => setShowProducts(true)}
               onBlur={handleInputBlur}
             />
-            <button type="submit" className="flex">
+            <button type="submit" className="flex1">
               <IoIosSearch className="icon" />
             </button>
           </form>
         )}
         {showProducts && (
-          <div className="suggestContainer flex">
+          <div className="suggestContainer flex1">
             {productsFilter.slice(0, 10).map((product, id) => (
               <Link key={id} to={`/product/${product.id}`}>
                 {product.name}
@@ -92,7 +92,7 @@ function Header({ user }) {
         )}
       </div>
 
-      <div className="flex">
+      <div className="flex1">
         {user ? (
           <button
             className="btn btnLogin"
@@ -108,16 +108,16 @@ function Header({ user }) {
         )}
         {shoppingContext && (
           <button
-            className="btn btnCart flex"
+            className="btn btnCart flex1"
             onClick={() => navigate("/shoppingCart")}
           >
             <TiShoppingCart />
-            <span className="flex">{shoppingContext.length}</span>
+            <span className="flex1">{shoppingContext.length}</span>
           </button>
         )}
         {showOptionsUser && (
           <div
-            className="optionsUser flex"
+            className="optionsUser flex1"
             onMouseEnter={() => setShowOptionsUser(true)}
             onMouseLeave={() => setShowOptionsUser(false)}
           >

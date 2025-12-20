@@ -32,7 +32,7 @@ function Home() {
   }, []);
 
   return (
-    <div className="page home flex">
+    <div className="flex flex-col bg-bg gap-16 w-full pt-[22vh] min-h-[88vh] px-[10vw] pb-[10vh] text-center items-center">
       <h1>Buy and Sell Sustainable Products on EcoMercado</h1>
 
       <SliderContainer

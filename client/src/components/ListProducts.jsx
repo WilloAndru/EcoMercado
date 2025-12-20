@@ -67,13 +67,13 @@ function ListProducts({ mode, listProducts, listTransactions }) {
       return (
         <div
           key={p.id}
-          className={mode ? "flex productComp1" : "flex productComp2"}
+          className={mode ? "flex1 productComp1" : "flex1 productComp2"}
           onClick={() => (!mode ? navigate(`/product/${p.id}`) : null)}
         >
-          <div className="flex">
+          <div className="flex1">
             <img src={p.image} alt="img" />
 
-            <div className="flex div">
+            <div className="flex1 div">
               <h2>{p.name}</h2>
 
               {(!mode || mode === "sales") && <h3>{formatPrice(p.price)}</h3>}
@@ -103,7 +103,7 @@ function ListProducts({ mode, listProducts, listTransactions }) {
             </div>
           </div>
 
-          <div className="flex div">
+          <div className="flex1 div">
             {mode === "shoppingCart" && (
               <button
                 className="red"
@@ -145,11 +145,11 @@ function ListProducts({ mode, listProducts, listTransactions }) {
   );
 
   return (
-    <div className="listProducts flex">
-      <div className="flex div1">{ListProducts}</div>
+    <div className="listProducts flex1">
+      <div className="flex1 div1">{ListProducts}</div>
 
       {listProducts.length > productsForPage && (
-        <div className="div2 flex">{listBtnPages}</div>
+        <div className="div2 flex1">{listBtnPages}</div>
       )}
     </div>
   );

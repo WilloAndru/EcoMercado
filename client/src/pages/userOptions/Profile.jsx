@@ -42,8 +42,8 @@ function Profile() {
   });
 
   return (
-    <div className="profile page flex">
-      <section className="flex w-full">
+    <div className="profile page flex1">
+      <section className="flex1 w-full">
         <img
           className="rounded-full w-24 object-cover"
           src={user.picture}

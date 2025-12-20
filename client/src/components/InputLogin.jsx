@@ -1,11 +1,11 @@
 function InputLogin(props) {
   return (
-    <div className='inputContainer input flex'>
+    <div className="inputContainer input flex1">
       <label>{props.label}</label>
-      <div className="inputDiv flex">
+      <div className="inputDiv flex1">
         {props.icon}
         <input
-          className='input'
+          className="input"
           type={props.type}
           placeholder={props.placeholder}
           onChange={props.onChange}
@@ -13,7 +13,7 @@ function InputLogin(props) {
         />
       </div>
     </div>
-  )
+  );
 }
 
-export default InputLogin
+export default InputLogin;

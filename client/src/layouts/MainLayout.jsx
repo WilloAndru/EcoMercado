@@ -31,7 +31,7 @@ function MainLayout() {
   }, []);
 
   return (
-    <div className="principal flex">
+    <div className="principal flex1">
       <Header user={user} />
       <Outlet />
       {(!user || user.role === "client") && <Footer />}

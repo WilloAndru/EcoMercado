@@ -70,8 +70,8 @@ function Search() {
 
   return (
     <div className="search page">
-      <div className="filters flex">
-        <div className="flex conteiner">
+      <div className="filters flex1">
+        <div className="flex1 conteiner">
           <h2>
             {valueName
               ? valueName.charAt(0).toUpperCase() + valueName.slice(1)
@@ -80,7 +80,7 @@ function Search() {
           <p>{productsFilter.length} results</p>
         </div>
 
-        <div className="flex conteiner">
+        <div className="flex1 conteiner">
           <h3>Sort by price</h3>
           <Select
             classNamePrefix="select"
@@ -93,7 +93,7 @@ function Search() {
           />
         </div>
 
-        <div className="flex conteiner">
+        <div className="flex1 conteiner">
           <h3>Sort by categories</h3>
           <Select
             classNamePrefix="select"

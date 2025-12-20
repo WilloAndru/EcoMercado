@@ -121,18 +121,18 @@ function ViewProduct() {
   };
 
   return (
-    <div className="viewProduct page flex">
-      <div className="viewProduct1 flex">
+    <div className="viewProduct page flex1">
+      <div className="viewProduct1 flex1">
         <img src={product.image} alt={product.name} />
 
-        <div className="productInfo flex">
+        <div className="productInfo flex1">
           <h1>{product.name}</h1>
 
           <h1>{formatPrice(product.price)}</h1>
 
           <p>{product.description}</p>
 
-          <div className="flex">
+          <div className="flex1">
             <button className="btn" onClick={() => verifyUser(true)}>
               Buy now
             </button>

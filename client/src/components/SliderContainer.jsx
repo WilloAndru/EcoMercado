@@ -23,7 +23,7 @@ function SliderContainer(props) {
   const elements = props.list.slice(0, maxImages).map((e, index) => {
     return (
       <button
-        className={`${props.className}Btn flex`}
+        className={`${props.className}Btn flex1`}
         key={index}
         onClick={
           props.className === "category"
@@ -72,25 +72,25 @@ function SliderContainer(props) {
   };
 
   return (
-    <div className={`${props.className}Container flex`}>
+    <div className={`${props.className}Container flex1`}>
       {/* Flecha Izquierda */}
       <button
-        className="arrowBtn flex"
+        className="arrowBtn flex1"
         onClick={() => moveSlider("left")}
         style={{ visibility: canMoveLeft ? "visible" : "hidden" }}
       >
         <FaArrowLeft />
       </button>
       {/* Slider */}
-      <div className={`${props.className}Div flex`}>
+      <div className={`${props.className}Div flex1`}>
         {/* Header */}
-        <div className="headerDiv flex">
+        <div className="headerDiv flex1">
           <h2>{props.title}</h2>
-          <div className="flex">{listSpans}</div>
+          <div className="flex1">{listSpans}</div>
         </div>
         {/* Contenedor Productos */}
         <div
-          className={`${props.className}List flex`}
+          className={`${props.className}List flex1`}
           style={{ transform: `translateX(-${slide.position}vw)` }}
         >
           {elements}
@@ -98,7 +98,7 @@ function SliderContainer(props) {
       </div>
       {/* Flecha derecha */}
       <button
-        className="arrowBtn flex"
+        className="arrowBtn flex1"
         onClick={() => moveSlider("right")}
         style={{ visibility: canMoveRight ? "visible" : "hidden" }}
       >

@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+@theme {
+  --color-primary: #49cb5c;
+  --color-hover: #baeb6c;
+  --color-bg: #f2f2f2;
+  --color-fg: #3d3d3d;
+}
+
 h1,
 h2,
 h3,

@@ -94,8 +94,8 @@ function BuyProduct() {
   };
 
   return (
-    <div className="buyProduct page flex">
-      <div className="flex leftConteiner ">
+    <div className="buyProduct page flex1">
+      <div className="flex1 leftConteiner ">
         <span className={error ? "showMessage" : "hiddenMessage"}>{error}</span>
 
         <form onSubmit={handleSuccessBuy}>

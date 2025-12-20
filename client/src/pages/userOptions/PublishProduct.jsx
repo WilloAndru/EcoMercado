@@ -1,13 +1,12 @@
-import React, { useRef, useState, useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import axios from 'axios';
-import Select from 'react-select';
+import React, { useRef, useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import Select from "react-select";
 import { MdAddPhotoAlternate } from "react-icons/md";
 
 const URI = import.meta.env.VITE_REACT_APP_API_URL;
 
 function PublishProduct() {
-
   const maxName = 64;
   const maxDescription = 256;
   const fileInputRef = useRef(null);
@@ -30,7 +29,7 @@ function PublishProduct() {
       const res = await axios.get(`${URI}/categories`);
       categories = res.data;
       setCategoriesName(res.data);
-    }
+    };
     getCategoriesName();
     if (idProduct > 0) {
       const getEditProduct = async () => {
@@ -42,9 +41,10 @@ function PublishProduct() {
         handleImageChange(res.data.image.data);
         setPrice(res.data.price);
         setQuantity(res.data.quantity);
-        setCategoryName(categories
-          .filter(c => c.id === res.data.categoryId)
-          .map(c => ({ value: c.id, label: c.name }))[0]
+        setCategoryName(
+          categories
+            .filter((c) => c.id === res.data.categoryId)
+            .map((c) => ({ value: c.id, label: c.name }))[0]
         );
       };
       getEditProduct();
@@ -63,29 +63,32 @@ function PublishProduct() {
     if (action === "publish") {
       const createProduct = async () => {
         const resProduct = await axios.post(`${URI}/publishProduct`, formData, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        })
+          headers: { "Content-Type": "multipart/form-data" },
+        });
         if (resProduct.status === 200) {
           const resTransaction = await axios.post(`${URI}/createSale`, {
             token: localStorage.getItem("token"),
-            productName: formData.get('name'),
-          })
+            productName: formData.get("name"),
+          });
           if (resTransaction.status === 200) {
             alert("Item added successfully");
             navigate("/editSales");
           }
         }
-      }
+      };
       createProduct();
-
     } else if (action === "update") {
       const updateProduct = async () => {
-        const res = await axios.patch(`${URI}/updateProduct/${idProduct}`, formData, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        })
+        const res = await axios.patch(
+          `${URI}/updateProduct/${idProduct}`,
+          formData,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+          }
+        );
         if (res.status === 200) {
           alert("Item updated successfully");
-          navigate("/profileSales")
+          navigate("/profileSales");
         }
       };
       updateProduct();
@@ -93,14 +96,14 @@ function PublishProduct() {
   };
 
   const handleEditName = (e) => {
-    setCounterName(e.target.value.length)
-    setName(e.target.value)
+    setCounterName(e.target.value.length);
+    setName(e.target.value);
     idProduct > 0 && setIsChange(true);
   };
 
   const handleEditDescription = (e) => {
-    setCounterDescription(e.target.value.length)
-    setDescription(e.target.value)
+    setCounterDescription(e.target.value.length);
+    setDescription(e.target.value);
     idProduct > 0 && setIsChange(true);
   };
 
@@ -114,24 +117,23 @@ function PublishProduct() {
       };
       reader.readAsDataURL(file);
       idProduct > 0 && setIsChange(true);
-
     } else {
       const uint8Array = new Uint8Array(value);
       const binaryString = String.fromCharCode.apply(null, uint8Array);
       const base64String = btoa(binaryString);
-      const mimeType = 'image/jpeg';
+      const mimeType = "image/jpeg";
 
       setSelectedImage(`data:${mimeType};base64,${base64String}`);
     }
   };
 
   const handleEditPrice = (e) => {
-    setPrice(e.target.value)
+    setPrice(e.target.value);
     idProduct > 0 && setIsChange(true);
   };
 
   const handleEditQuantity = (e) => {
-    setQuantity(e.target.value)
+    setQuantity(e.target.value);
     idProduct > 0 && setIsChange(true);
   };
 
@@ -141,44 +143,53 @@ function PublishProduct() {
   };
 
   return (
-    <form className='publishProduct page flex' onSubmit={handleButton}>
-
+    <form className="publishProduct page flex1" onSubmit={handleButton}>
       <h1>{idProduct > 0 ? "Edit Product" : "Publish Product"}</h1>
 
-      <div className='flex div'>
+      <div className="flex1 div">
         <h2>Name</h2>
-        <label>Clear and concise name; you can also use keywords to improve searchability</label>
+        <label>
+          Clear and concise name; you can also use keywords to improve
+          searchability
+        </label>
         <input
           type="text"
-          name='name'
+          name="name"
           value={name}
           onChange={handleEditName}
           maxLength={maxName}
           required
         />
-        <span>{counterName}/{maxName}</span>
+        <span>
+          {counterName}/{maxName}
+        </span>
       </div>
 
-      <div className='flex div'>
+      <div className="flex1 div">
         <h2>Description</h2>
-        <label>Detailed description highlighting the product’s most important features</label>
+        <label>
+          Detailed description highlighting the product’s most important
+          features
+        </label>
         <textarea
           type="text"
-          name='description'
+          name="description"
           value={description}
           onChange={handleEditDescription}
           maxLength={maxDescription}
           required
         />
-        <span>{counterDescription}/{maxDescription}</span>
+        <span>
+          {counterDescription}/{maxDescription}
+        </span>
       </div>
 
-      <div className='flex div'>
+      <div className="flex1 div">
         <h2>Image</h2>
         <label>Full image of the product in any format</label>
-        <div onClick={handleInputImg} className='imgDiv flex'>
+        <div onClick={handleInputImg} className="imgDiv flex1">
           {selectedImage ? (
-            <img src={selectedImage} alt="Selected" className='previewImg' />
+            <img src={selectedImage} alt="Selected" className="previewImg" />
           ) : (
             <>
               <MdAddPhotoAlternate />
@@ -187,19 +198,19 @@ function PublishProduct() {
           )}
         </div>
         <input
-          className='imgInput'
-          name='image'
+          className="imgInput"
+          name="image"
           onChange={handleImageChange}
           ref={fileInputRef}
           type="file"
         />
       </div>
 
-      <div className='flex div'>
+      <div className="flex1 div">
         <h2>Price</h2>
         <label>What will be the price of the product?</label>
         <input
-          name='price'
+          name="price"
           value={price}
           onChange={handleEditPrice}
           type="number"
@@ -207,11 +218,11 @@ function PublishProduct() {
         />
       </div>
 
-      <div className='flex div'>
+      <div className="flex1 div">
         <h2>Units</h2>
         <label>How many units are available?</label>
         <input
-          name='quantity'
+          name="quantity"
           type="number"
           value={quantity}
           onChange={handleEditQuantity}
@@ -220,28 +231,35 @@ function PublishProduct() {
         />
       </div>
 
-      <div className='flex div'>
+      <div className="flex1 div">
         <h2>Category</h2>
         <label>Which category does the product belong to?</label>
         <Select
-          classNamePrefix='select'
-          name='category'
+          classNamePrefix="select"
+          name="category"
           value={categoryName || { value: 1, label: "Sustainable energy" }}
           onChange={handleEditCategory}
-          className='selectContainer'
-          options={categoriesName.map((c) => { return { value: c.id, label: c.name } })}
+          className="selectContainer"
+          options={categoriesName.map((c) => {
+            return { value: c.id, label: c.name };
+          })}
           required
         />
       </div>
 
-      {idProduct > 0 ?
-        (isChange && <button type='submit' name='update' className='btn'>Update Product</button>)
-        :
-        <button type='submit' name='publish' className='btn'>Publish Product</button>
-      }
-
+      {idProduct > 0 ? (
+        isChange && (
+          <button type="submit" name="update" className="btn">
+            Update Product
+          </button>
+        )
+      ) : (
+        <button type="submit" name="publish" className="btn">
+          Publish Product
+        </button>
+      )}
     </form>
-  )
+  );
 }
 
-export default PublishProduct
+export default PublishProduct;
