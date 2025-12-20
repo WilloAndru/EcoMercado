@@ -10,22 +10,21 @@ function Home() {
   const [forDay, setForDay] = useState([]);
   const [categories, setCategories] = useState([]);
 
-  const getDayNumber = () => {
-    const dayOfWeek = new Date().getDay();
-
-    return dayOfWeek === 0 ? 7 : dayOfWeek;
-  };
-
+  // Carga inicial de los datos del home
   useEffect(() => {
     const getDatas = async () => {
+      // Obtener categorías
       const resCategories = await axios.get(`${URI}/categories`);
       setCategories(resCategories.data);
+      // Obtener productos más vendidos
       const resBestSellers = await axios.get(`${URI}/bestSellers`);
       setBestSellers(resBestSellers.data);
+      // Obtener productos más recientes
       const resLatest = await axios.get(`${URI}/latest`);
       setLatest(resLatest.data);
+      // Obtener productos recomendados según el día de la semana
       const resForDay = await axios.post(`${URI}/forDay`, {
-        categoryId: getDayNumber(),
+        categoryId: new Date().getDay(),
       });
       setForDay(resForDay.data);
     };

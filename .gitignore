@@ -1,5 +1,0 @@
-# Ignorar variables de entorno
-client/.env
-client/.env.*
-server/.env
-server/.env.*

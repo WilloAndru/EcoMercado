@@ -73,6 +73,7 @@ function SliderContainer(props) {
 
   return (
     <div className={`${props.className}Container flex`}>
+      {/* Flecha Izquierda */}
       <button
         className="arrowBtn flex"
         onClick={() => moveSlider("left")}
@@ -80,11 +81,14 @@ function SliderContainer(props) {
       >
         <FaArrowLeft />
       </button>
+      {/* Slider */}
       <div className={`${props.className}Div flex`}>
+        {/* Header */}
         <div className="headerDiv flex">
           <h2>{props.title}</h2>
           <div className="flex">{listSpans}</div>
         </div>
+        {/* Contenedor Productos */}
         <div
           className={`${props.className}List flex`}
           style={{ transform: `translateX(-${slide.position}vw)` }}
@@ -92,6 +96,7 @@ function SliderContainer(props) {
           {elements}
         </div>
       </div>
+      {/* Flecha derecha */}
       <button
         className="arrowBtn flex"
         onClick={() => moveSlider("right")}
