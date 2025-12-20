@@ -25,14 +25,6 @@ html {
   gap: 1rem;
 }
 
-a {
-  text-decoration: none;
-
-  &:hover {
-    color: var(--primaryColor);
-  }
-}
-
 p {
   font-size: 1.1rem;
 }
@@ -361,90 +353,6 @@ p {
 .principal {
   gap: 0;
   flex-direction: column;
-
-  header {
-    justify-content: space-around;
-    width: 100%;
-    height: 12vh;
-    padding: 0 2rem;
-
-    .searchBar {
-      position: relative;
-    }
-
-    .suggestContainer {
-      flex-direction: column;
-      position: absolute;
-      align-items: flex-start;
-      top: 100%;
-      left: 0;
-      width: 100%;
-      background-color: var(--whiteColor);
-      padding-bottom: 2rem;
-      gap: 0;
-      border-radius: 1rem;
-      box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-      width: var(--widthHeaderInput);
-
-      * {
-        width: 100%;
-        padding: 2rem 2rem 0;
-        font-size: 1rem;
-      }
-    }
-
-    .btnLogin {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: var(--widthHeaderBut);
-      white-space: nowrap;
-    }
-
-    .btnCart {
-      padding: 0.5rem;
-      width: 3rem;
-      height: 3rem;
-      position: relative;
-
-      * {
-        font-size: 2rem;
-        color: var(--whiteColor);
-      }
-
-      span {
-        color: var(--blackColor);
-        justify-content: center;
-        width: 1.5rem;
-        height: 1.5rem;
-        background-color: var(--whiteColor);
-        border-radius: 50%;
-        font-size: 1rem;
-        position: absolute;
-        bottom: -0.5rem;
-        right: -0.5rem;
-      }
-    }
-
-    .optionsUser {
-      gap: 0;
-      top: 67%;
-      position: absolute;
-      align-items: flex-start;
-      flex-direction: column;
-      background-color: var(--whiteColor);
-      border-radius: 1rem;
-      box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-      padding-bottom: 2rem;
-      max-width: var(--widthHeaderBut);
-
-      * {
-        width: 100%;
-        padding: 2rem 2rem 0;
-        font-weight: bold;
-        font-size: 1rem;
-      }
-    }
-  }
 
   footer {
     position: relative;

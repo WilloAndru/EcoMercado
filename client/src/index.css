@@ -7,6 +7,10 @@
   --color-fg: #3d3d3d;
 }
 
+html {
+  @apply text-[0.6rem] md:text-sm;
+}
+
 button {
   @apply cursor-pointer;
 }
@@ -16,7 +20,7 @@ input {
 }
 
 .btn-1 {
-  @apply text-white px-5 py-3 hover:bg-hover border border-bg rounded-full;
+  @apply text-white px-5 py-3 hover:bg-hover border border-bg rounded-2xl font-bold;
 }
 
 h1,

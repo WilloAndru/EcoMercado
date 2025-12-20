@@ -69,12 +69,13 @@ function Header({ user }) {
         {/* Form de busqueda */}
         {(!user || user.role === "client") && (
           <form
-            className="flex border border-bg rounded-full h-fit overflow-hidden"
+            className="flex border border-bg rounded-2xl overflow-hidden"
             onSubmit={goSearchInterface}
           >
             {/* Input */}
             <input
               type="text"
+              className="w-50 md:w-70"
               placeholder="Search for what you want"
               value={input}
               onChange={(e) => handleInputChange(e.target.value)}
@@ -92,7 +93,7 @@ function Header({ user }) {
         )}
         {/* Recomendaciones de busqueda */}
         {showProducts && (
-          <div className="suggestContainer flex1">
+          <div className="flex flex-col">
             {productsFilter.slice(0, 10).map((product, id) => (
               <Link key={id} to={`/product/${product.id}`}>
                 {product.name}
@@ -101,8 +102,8 @@ function Header({ user }) {
           </div>
         )}
       </section>
-      {/* Boton de login o opciones de usuario */}
-      <div className="flex">
+      {/* Seccion de auth y usuario */}
+      <section className="flex gap-4">
         {user ? (
           // Boton de opciones de usuario
           <button
@@ -114,42 +115,75 @@ function Header({ user }) {
           </button>
         ) : (
           // Boton de auth
-          <Link className="btn btnLogin" to="/login">
+          <Link className="btn-1" to="/login">
             Log in or register
           </Link>
         )}
+        {/* Link de carrito de compras */}
         {shoppingContext && (
-          <button
-            className="btn btnCart flex1"
-            onClick={() => navigate("/shoppingCart")}
-          >
-            <TiShoppingCart />
-            <span className="flex1">{shoppingContext.length}</span>
-          </button>
+          <Link className="btn-1 flex relative" to={"/shoppingCart"}>
+            <TiShoppingCart className="text-3xl" />
+            <span className="absolute -bottom-3 left-3 w-6 h-6 rounded-full flex items-center justify-center bg-white text-fg">
+              {shoppingContext.length}
+            </span>
+          </Link>
         )}
+        {/* Opciones de usuario */}
         {showOptionsUser && (
           <div
-            className="optionsUser flex1"
+            className="shadow-2xl absolute top-19 flex flex-col items-start bg-bg rounded-2xl"
             onMouseEnter={() => setShowOptionsUser(true)}
             onMouseLeave={() => setShowOptionsUser(false)}
           >
-            {user.role === "client" && <Link to="/profile">My Profile</Link>}
             {user.role === "client" && (
-              <Link to="/publishProduct/0">Publish</Link>
+              <Link
+                className="py-5 px-6 font-bold hover:bg-white rounded-2xl w-full"
+                to="/profile"
+              >
+                My Profile
+              </Link>
             )}
             {user.role === "client" && (
-              <Link to="/editSales">Edit Listings</Link>
+              <Link
+                className="py-5 px-6 font-bold hover:bg-white rounded-2xl w-full"
+                to="/publishProduct/0"
+              >
+                Publish
+              </Link>
             )}
             {user.role === "client" && (
-              <Link to="/profileSales">Sold Items</Link>
+              <Link
+                className="py-5 px-6 font-bold hover:bg-white rounded-2xl w-full"
+                to="/editSales"
+              >
+                Edit Listings
+              </Link>
             )}
             {user.role === "client" && (
-              <Link to="/profilePurchases">My Purchases</Link>
+              <Link
+                className="py-5 px-6 font-bold hover:bg-white rounded-2xl w-full"
+                to="/profileSales"
+              >
+                Sold Items
+              </Link>
             )}
-            <Link onClick={handleLogout}>Log Out</Link>
+            {user.role === "client" && (
+              <Link
+                className="py-5 px-6 font-bold hover:bg-white rounded-2xl w-full"
+                to="/profilePurchases"
+              >
+                My Purchases
+              </Link>
+            )}
+            <Link
+              className="py-5 px-6 font-bold hover:bg-white rounded-2xl w-full"
+              onClick={handleLogout}
+            >
+              Log Out
+            </Link>
           </div>
         )}
-      </div>
+      </section>
     </header>
   );
 }
