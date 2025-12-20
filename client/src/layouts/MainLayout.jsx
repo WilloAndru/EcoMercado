@@ -1,33 +1,24 @@
 import { Outlet } from "react-router-dom";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
-import axios from "axios";
 import { useState, useEffect } from "react";
-
-const URL = import.meta.env.VITE_REACT_APP_API_URL;
+import { getUserData } from "../api/user.api";
 
 function MainLayout() {
   const [user, setUser] = useState(null);
 
+  // Obtenemos los datos de usuario
   useEffect(() => {
-    const fetchData = async () => {
-      const token = localStorage.getItem("token");
-      if (token) {
-        try {
-          const response = await axios.get(`${URL}/getUserDatas`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-          setUser(response.data);
-          localStorage.setItem("saveEmail", response.data.email);
-        } catch (error) {
-          console.log(error);
-        }
+    const loadUser = async () => {
+      try {
+        const userData = await getUserData();
+        setUser(userData);
+        localStorage.setItem("saveEmail", userData.email);
+      } catch (error) {
+        console.error("Error loading user", error);
       }
     };
-    fetchData();
-    console.log(localStorage.getItem("token"));
+    loadUser();
   }, []);
 
   return (
