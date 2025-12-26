@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { IoIosSearch } from "react-icons/io";
 import { TiShoppingCart } from "react-icons/ti";
@@ -25,16 +25,11 @@ function Header({ user }) {
 
   const handleInputChange = (value) => {
     setInput(value);
+    setShowProducts(true);
     clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
       fetchNamesProducts(value);
     }, 300);
-  };
-
-  const handleLogout = () => {
-    localStorage.clear();
-    navigate("/");
-    window.location.reload();
   };
 
   const handleInputBlur = () => {
@@ -54,6 +49,14 @@ function Header({ user }) {
     }
   };
 
+  // Cierra la sesión del usuario
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate("/");
+    window.location.reload();
+  };
+  const canSearch = !user || user.role === "client";
+
   return (
     <header className="flex w-full justify-around items-center fixed bg-primary z-10 h-25 px-5">
       {/* Marca */}
@@ -61,53 +64,56 @@ function Header({ user }) {
         to={user && user.role === "admin" ? "/admin" : "/"}
         className="flex gap-2 items-center text-white"
       >
-        <img className="w-15" src="/icon.png" alt="Icon" />
-        <h1 className="hidden md:flex">EcoMercado</h1>
+        <img className="w-14" src="/icon.png" alt="Icon" />
+        <span className="font-bold text-3xl hidden md:flex">EcoMercado</span>
       </Link>
       {/* Barra de busqueda */}
-      <section className="flex">
-        {/* Form de busqueda */}
-        {(!user || user.role === "client") && (
+      <section className="relative">
+        {canSearch && (
           <form
-            className="flex border border-bg rounded-2xl overflow-hidden"
             onSubmit={goSearchInterface}
+            className="flex border border-bg rounded-2xl overflow-hidden"
           >
-            {/* Input */}
             <input
               type="text"
-              className="w-50 md:w-70"
-              placeholder="Search for what you want"
               value={input}
+              placeholder="Search products"
               onChange={(e) => handleInputChange(e.target.value)}
               onFocus={() => setShowProducts(true)}
               onBlur={handleInputBlur}
+              className="w-50 md:w-70"
             />
-            {/* Boton de buscar */}
+
             <button
               type="submit"
-              className="text-white px-5 py-3 hover:bg-hover"
+              className="px-5 py-3 text-white hover:bg-hover"
             >
               <IoIosSearch className="text-2xl" />
             </button>
           </form>
         )}
-        {/* Recomendaciones de busqueda */}
-        {showProducts && (
-          <div className="flex flex-col">
-            {productsFilter.slice(0, 10).map((product, id) => (
-              <Link key={id} to={`/product/${product.id}`}>
-                {product.name}
-              </Link>
+        {/* Sugerencias de busqueda */}
+        {showProducts && productsFilter.length > 0 && (
+          <ul className="absolute z-50 mt-2 bg-white rounded-xl shadow-lg">
+            {productsFilter.slice(0, 10).map((product) => (
+              <li key={product.id}>
+                <Link
+                  to={`/product/${product.id}`}
+                  className="block px-4 py-2 hover:bg-gray-100"
+                >
+                  {product.name}
+                </Link>
+              </li>
             ))}
-          </div>
+          </ul>
         )}
       </section>
       {/* Seccion de auth y usuario */}
-      <section className="flex gap-4">
+      <section className="flex gap-4 items-center">
         {user ? (
           // Boton de opciones de usuario
           <button
-            className="btn-1"
+            className="btn-1 truncate max-w-41"
             onMouseEnter={() => setShowOptionsUser(true)}
             onMouseLeave={() => setShowOptionsUser(false)}
           >
@@ -130,58 +136,36 @@ function Header({ user }) {
         )}
         {/* Opciones de usuario */}
         {showOptionsUser && (
-          <div
-            className="shadow-2xl absolute top-19 flex flex-col items-start bg-bg rounded-2xl"
+          <section
+            className="absolute top-19 flex flex-col bg-bg rounded-2xl shadow-2xl"
             onMouseEnter={() => setShowOptionsUser(true)}
             onMouseLeave={() => setShowOptionsUser(false)}
           >
-            {user.role === "client" && (
-              <Link
-                className="py-5 px-6 font-bold hover:bg-white rounded-2xl w-full"
-                to="/profile"
-              >
-                My Profile
-              </Link>
-            )}
-            {user.role === "client" && (
-              <Link
-                className="py-5 px-6 font-bold hover:bg-white rounded-2xl w-full"
-                to="/publishProduct/0"
-              >
-                Publish
-              </Link>
-            )}
-            {user.role === "client" && (
-              <Link
-                className="py-5 px-6 font-bold hover:bg-white rounded-2xl w-full"
-                to="/editSales"
-              >
-                Edit Listings
-              </Link>
-            )}
-            {user.role === "client" && (
-              <Link
-                className="py-5 px-6 font-bold hover:bg-white rounded-2xl w-full"
-                to="/profileSales"
-              >
-                Sold Items
-              </Link>
-            )}
-            {user.role === "client" && (
-              <Link
-                className="py-5 px-6 font-bold hover:bg-white rounded-2xl w-full"
-                to="/profilePurchases"
-              >
-                My Purchases
-              </Link>
-            )}
-            <Link
-              className="py-5 px-6 font-bold hover:bg-white rounded-2xl w-full"
+            {/* Opciones disponibles para usuarios con rol cliente */}
+            {user.role === "client" &&
+              [
+                { to: "/profile", label: "My Profile" },
+                { to: "/publishProduct/0", label: "Publish" },
+                { to: "/editSales", label: "Edit Listings" },
+                { to: "/profileSales", label: "Sold Items" },
+                { to: "/profilePurchases", label: "My Purchases" },
+              ].map(({ to, label }) => (
+                <Link
+                  key={to}
+                  to={to}
+                  className="w-full px-6 py-5 font-bold rounded-2xl hover:bg-white"
+                >
+                  {label}
+                </Link>
+              ))}
+            {/* Boton de cerrar sesion */}
+            <button
               onClick={handleLogout}
+              className="w-full px-6 py-5 font-bold text-left rounded-2xl hover:bg-white"
             >
               Log Out
-            </Link>
-          </div>
+            </button>
+          </section>
         )}
       </section>
     </header>

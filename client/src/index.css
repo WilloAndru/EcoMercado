@@ -20,7 +20,7 @@ input {
 }
 
 .btn-1 {
-  @apply text-white px-5 py-3 hover:bg-hover border border-bg rounded-2xl font-bold;
+  @apply text-white px-5 py-3 hover:bg-hover border border-bg rounded-2xl font-bold h-fit;
 }
 
 h1,
