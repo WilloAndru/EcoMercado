@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import InputComponent from "../../components/InputProfile";
 
-const URL = import.meta.env.VITE_REACT_APP_API_URL;
+const URL = import.meta.env.VITE_API_URL;
 
 function Profile() {
   const [user, setUser] = useState({});

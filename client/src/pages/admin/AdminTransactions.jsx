@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react'
-import axios from 'axios'
-import ColumTransactions from '../../components/ColumnTransactions';
+import { useEffect, useState } from "react";
+import axios from "axios";
+import ColumTransactions from "../../components/ColumnTransactions";
 
-const URL = import.meta.env.VITE_REACT_APP_API_URL;
+const URL = import.meta.env.VITE_API_URL;
 
 function AdminTransactions() {
-
   const [transactions, setTransactions] = useState([]);
 
   useEffect(() => {
@@ -18,17 +17,12 @@ function AdminTransactions() {
 
   const keys = Object.keys(transactions[0] || {});
 
-  const listUsers = transactions.map(transaction => {
-    return (
-      <ColumTransactions
-        key={transaction.id}
-        transaction={transaction}
-      />
-    )
-  })
+  const listUsers = transactions.map((transaction) => {
+    return <ColumTransactions key={transaction.id} transaction={transaction} />;
+  });
 
   return (
-    <table cellSpacing="0" className='adminUsers'>
+    <table cellSpacing="0" className="adminUsers">
       <thead>
         <tr>
           <th>{keys[0]}</th>
@@ -39,11 +33,9 @@ function AdminTransactions() {
           <th>{keys[5]}</th>
         </tr>
       </thead>
-      <tbody>
-        {listUsers}
-      </tbody>
+      <tbody>{listUsers}</tbody>
     </table>
-  )
+  );
 }
 
-export default AdminTransactions
+export default AdminTransactions;

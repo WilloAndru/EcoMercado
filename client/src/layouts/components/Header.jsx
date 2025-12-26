@@ -1,51 +1,23 @@
-import { useRef, useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { IoIosSearch } from "react-icons/io";
 import { TiShoppingCart } from "react-icons/ti";
+import { useSearchBar } from "../../hooks/useSearchBar";
 
 function Header({ user }) {
   const shoppingContext = JSON.parse(localStorage.getItem("shoppingContext"));
   const [showOptionsUser, setShowOptionsUser] = useState(false);
-  const [input, setInput] = useState("");
-  const [showProducts, setShowProducts] = useState(false);
-  const [productsIdNames] = useState([]);
-  const [productsFilter, setProductsFilter] = useState([]);
+  const { query, results, setResults, onChange } = useSearchBar();
   const navigate = useNavigate();
-  const blurTimeout = useRef(null);
-
-  const fetchNamesProducts = async (value) => {
-    const valueMin = value.toLowerCase();
-    const filterProducts = productsIdNames.filter((p) =>
-      p.name.toLowerCase().includes(valueMin)
-    );
-    setProductsFilter(filterProducts);
-  };
-
-  const debounceRef = useRef();
-
-  const handleInputChange = (value) => {
-    setInput(value);
-    setShowProducts(true);
-    clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => {
-      fetchNamesProducts(value);
-    }, 300);
-  };
-
-  const handleInputBlur = () => {
-    blurTimeout.current = setTimeout(() => {
-      setShowProducts(false);
-    }, 500);
-  };
 
   const goSearchInterface = async (e) => {
     e.preventDefault();
-    input
-      ? localStorage.setItem("valueInput", input)
+    query
+      ? localStorage.setItem("valueInput", query)
       : localStorage.removeItem("valueInput");
-    if (input || localStorage.getItem("valueInput")) {
-      setShowProducts(false);
-      window.location.href = "/search";
+    if (query || localStorage.getItem("valueInput")) {
+      setResults([]);
+      navigate("/search");
     }
   };
 
@@ -76,11 +48,9 @@ function Header({ user }) {
           >
             <input
               type="text"
-              value={input}
+              value={query}
               placeholder="Search products"
-              onChange={(e) => handleInputChange(e.target.value)}
-              onFocus={() => setShowProducts(true)}
-              onBlur={handleInputBlur}
+              onChange={(e) => onChange(e.target.value)}
               className="w-50 md:w-70"
             />
 
@@ -93,15 +63,16 @@ function Header({ user }) {
           </form>
         )}
         {/* Sugerencias de busqueda */}
-        {showProducts && productsFilter.length > 0 && (
-          <ul className="absolute z-50 mt-2 bg-white rounded-xl shadow-lg">
-            {productsFilter.slice(0, 10).map((product) => (
-              <li key={product.id}>
+        {results.length > 0 && (
+          <ul className="absolute z-10 bg-bg rounded-xl shadow-2xl w-50 md:w-70">
+            {results.map((item, i) => (
+              <li key={i}>
                 <Link
-                  to={`/product/${product.id}`}
-                  className="block px-4 py-2 hover:bg-gray-100"
+                  to={`/product/${item.id}`}
+                  onClick={() => setResults([])}
+                  className="flex px-6 py-4 rounded-xl hover:bg-white"
                 >
-                  {product.name}
+                  {item.label}
                 </Link>
               </li>
             ))}
@@ -137,7 +108,7 @@ function Header({ user }) {
         {/* Opciones de usuario */}
         {showOptionsUser && (
           <section
-            className="absolute top-19 flex flex-col bg-bg rounded-2xl shadow-2xl"
+            className="absolute top-18 flex flex-col bg-bg rounded-2xl shadow-2xl"
             onMouseEnter={() => setShowOptionsUser(true)}
             onMouseLeave={() => setShowOptionsUser(false)}
           >

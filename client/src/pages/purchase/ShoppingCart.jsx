@@ -3,7 +3,7 @@ import axios from "axios";
 import ListProducts from "../../components/ListProducts";
 import { useNavigate } from "react-router-dom";
 
-const URI = import.meta.env.VITE_REACT_APP_API_URL;
+const URI = import.meta.env.VITE_API_URL;
 
 function ShoppingCart() {
   const shoppingContext = JSON.parse(localStorage.getItem("shoppingContext"));

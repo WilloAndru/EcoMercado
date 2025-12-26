@@ -1,6 +1,7 @@
 import ProductModel from "../models/productModel.js";
 import axios from "axios";
 import FormData from "form-data";
+import { Op } from "sequelize";
 
 export const getAllProducts = async (req, res) => {
   try {
@@ -22,15 +23,34 @@ export const getProduct = async (req, res) => {
 
 export const getProductsIdNames = async (req, res) => {
   try {
-    const products = await ProductModel.findAll();
-    const productsIdNames = products.map((product) => ({
+    const { q = "", limit = 5 } = req.query;
+
+    if (!q.trim()) {
+      return res.status(200).json([]);
+    }
+
+    const products = await ProductModel.findAll({
+      attributes: ["id", "name"],
+      where: {
+        name: {
+          [Op.like]: `%${q}%`,
+        },
+      },
+      limit: Number(limit),
+      order: [["name", "ASC"]],
+    });
+
+    const results = products.map((product) => ({
       id: product.id,
-      name: product.name,
+      label: product.name,
     }));
 
-    res.status(200).json(productsIdNames);
+    res.status(200).json(results);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Search products error:", error);
+    res.status(500).json({
+      message: "Error searching products",
+    });
   }
 };
 

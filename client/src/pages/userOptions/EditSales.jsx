@@ -3,7 +3,7 @@ import ListProducts from "../../components/ListProducts";
 import axios from "axios";
 import { RiPlantLine } from "react-icons/ri";
 
-const URI = import.meta.env.VITE_REACT_APP_API_URL;
+const URI = import.meta.env.VITE_API_URL;
 
 function EditSales() {
   const [products, setProducts] = useState([]);

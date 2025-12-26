@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react'
-import axios from 'axios'
-import ColumUsers from '../../components/ColumUsers';
+import { useEffect, useState } from "react";
+import axios from "axios";
+import ColumUsers from "../../components/ColumUsers";
 
-const URL = import.meta.env.VITE_REACT_APP_API_URL;
+const URL = import.meta.env.VITE_API_URL;
 
 function AdminUsers() {
-
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
@@ -18,17 +17,12 @@ function AdminUsers() {
 
   const keys = Object.keys(users[0] || {});
 
-  const listUsers = users.map(user => {
-    return (
-      <ColumUsers
-        key={user.id}
-        user={user}
-      />
-    )
-  })
+  const listUsers = users.map((user) => {
+    return <ColumUsers key={user.id} user={user} />;
+  });
 
   return (
-    <table cellSpacing="0" className='adminUsers'>
+    <table cellSpacing="0" className="adminUsers">
       <thead>
         <tr>
           <th>{keys[0]}</th>
@@ -42,11 +36,9 @@ function AdminUsers() {
           <th>Delete</th>
         </tr>
       </thead>
-      <tbody>
-        {listUsers}
-      </tbody>
+      <tbody>{listUsers}</tbody>
     </table>
-  )
+  );
 }
 
-export default AdminUsers
+export default AdminUsers;

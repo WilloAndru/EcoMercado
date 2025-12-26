@@ -9,7 +9,7 @@ import { FaArrowRight } from "react-icons/fa";
 import { justNameUser } from "../../utils/justNameUser";
 import Swal from "sweetalert2";
 
-const URI = import.meta.env.VITE_REACT_APP_API_URL;
+const URI = import.meta.env.VITE_API_URL;
 
 function ViewProduct() {
   const shoppingContext = JSON.parse(localStorage.getItem("shoppingContext"));

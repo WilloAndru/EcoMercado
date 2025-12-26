@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import SliderContainer from "../../components/SliderContainer";
 import axios from "axios";
 
-const URI = import.meta.env.VITE_REACT_APP_API_URL;
+const URI = import.meta.env.VITE_API_URL;
 
 function Home() {
   const [bestSellers, setBestSellers] = useState([]);

@@ -4,7 +4,7 @@ import Header from "./components/Header";
 import axios from "axios";
 import { useState, useEffect } from "react";
 
-const URL = import.meta.env.VITE_REACT_APP_API_URL;
+const URL = import.meta.env.VITE_API_URL;
 
 function MainLayout() {
   const [user, setUser] = useState(null);

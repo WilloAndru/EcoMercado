@@ -2,7 +2,7 @@ import { MdDeleteForever } from "react-icons/md";
 import axios from "axios";
 import Swal from "sweetalert2";
 
-const URI = import.meta.env.VITE_REACT_APP_API_URL;
+const URI = import.meta.env.VITE_API_URL;
 
 function ColumProducts({ product }) {
   const handleDeleteClick = async () => {

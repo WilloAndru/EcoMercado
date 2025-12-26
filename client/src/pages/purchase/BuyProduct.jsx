@@ -4,7 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { formatPrice } from "../../utils/formatPrice";
 import { validateCreditCard } from "../../utils/validateCreditCard";
 
-const URI = import.meta.env.VITE_REACT_APP_API_URL;
+const URI = import.meta.env.VITE_API_URL;
 
 function BuyProduct() {
   const { type } = useParams();
