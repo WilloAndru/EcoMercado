@@ -5,11 +5,15 @@ import { TiShoppingCart } from "react-icons/ti";
 import { useSearchBar } from "../../hooks/useSearchBar";
 
 function Header({ user }) {
+  const { query, results, setResults, onChange } = useSearchBar();
+
   const shoppingContext = JSON.parse(localStorage.getItem("shoppingContext"));
   const [showOptionsUser, setShowOptionsUser] = useState(false);
-  const { query, results, setResults, onChange } = useSearchBar();
+
+  const isClient = !user || user.role === "client";
   const navigate = useNavigate();
 
+  // Cuando se le da click a buscar
   const goSearchInterface = async (e) => {
     e.preventDefault();
     query
@@ -27,7 +31,6 @@ function Header({ user }) {
     navigate("/");
     window.location.reload();
   };
-  const canSearch = !user || user.role === "client";
 
   return (
     <header className="flex w-full justify-around items-center fixed bg-primary z-10 h-25 px-5">
@@ -41,7 +44,7 @@ function Header({ user }) {
       </Link>
       {/* Barra de busqueda */}
       <section className="relative">
-        {canSearch && (
+        {isClient && (
           <form
             onSubmit={goSearchInterface}
             className="flex border border-bg rounded-2xl overflow-hidden"
@@ -79,10 +82,10 @@ function Header({ user }) {
           </ul>
         )}
       </section>
-      {/* Seccion de auth y usuario */}
+      {/* Seccion derecha */}
       <section className="flex gap-4 items-center">
+        {/* Boton de auth y opciones de usuario */}
         {user ? (
-          // Boton de opciones de usuario
           <button
             className="btn-1 truncate max-w-41"
             onMouseEnter={() => setShowOptionsUser(true)}
@@ -91,12 +94,11 @@ function Header({ user }) {
             {user.name}
           </button>
         ) : (
-          // Boton de auth
           <Link className="btn-1" to="/login">
             Log in or register
           </Link>
         )}
-        {/* Link de carrito de compras */}
+        {/* Carrito de compras */}
         {shoppingContext && (
           <Link className="btn-1 flex relative" to={"/shoppingCart"}>
             <TiShoppingCart className="text-3xl" />
