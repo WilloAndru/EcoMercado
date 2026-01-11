@@ -1,6 +1,5 @@
 import express from "express";
 import cors from "cors";
-import db from "./config/db.js";
 import router from "./routes/routes.js";
 import { authMiddleware } from "./middleware/authMiddleware.js";
 
@@ -18,12 +17,5 @@ app.use("/api", router);
 app.get("/api/protected", authMiddleware, (req, res) => {
   res.status(200).json({ message: "Acceso concedido a contenido protegido" });
 });
-
-try {
-  await db.authenticate();
-  console.log("Conexion exitosa a la base de datos");
-} catch (error) {
-  console.log(`Error ${error}`);
-}
 
 export default app;
