@@ -18,7 +18,7 @@ function ViewProduct() {
   const [similarProducts, setSimilarProducts] = useState([]);
   const [sellerName, setSellerName] = useState("");
   const [sellerId, setSellerId] = useState(0);
-  const [userId, setUserId] = useState(0);
+  const [user_id, setUserId] = useState(0);
   const [showQuantity, setShowQuantity] = useState(false);
   const [units, setUnits] = useState("");
   const [isBuyNow, setIsBuyNow] = useState(null);
@@ -39,11 +39,11 @@ function ViewProduct() {
 
       const resSeller = await axios.get(`${URI}/productSeller/${id}`);
       setSellerName(justNameUser(resSeller.data.userName));
-      setSellerId(resSeller.data.userId);
+      setSellerId(resSeller.data.user_id);
 
       const resSuggest = await axios.get(`${URI}/products`);
       const filter = resSuggest.data.filter(
-        (p) => p.categoryId === res.data.categoryId
+        (p) => p.category_id === res.data.category_id
       );
       setSimilarProducts(filter);
 
@@ -58,7 +58,7 @@ function ViewProduct() {
   }, [id]);
 
   const verifyUser = (isBuyNow) => {
-    if (sellerId === userId) {
+    if (sellerId === user_id) {
       alert("You can't buy your own products");
     } else if (!localStorage.getItem("token")) {
       Swal.fire({

@@ -43,7 +43,7 @@ function PublishProduct() {
         setQuantity(res.data.quantity);
         setCategoryName(
           categories
-            .filter((c) => c.id === res.data.categoryId)
+            .filter((c) => c.id === res.data.category_id)
             .map((c) => ({ value: c.id, label: c.name }))[0]
         );
       };

@@ -70,7 +70,7 @@ function BuyProduct() {
           `${URI}/createIncome`,
           {
             products: products.map((p) => ({
-              productId: p.id,
+              product_id: p.id,
               quantity: p.quantity,
               income: p.price * p.quantity * 1.1,
             })),

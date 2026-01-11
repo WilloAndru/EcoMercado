@@ -89,7 +89,7 @@ export const publishProduct = async (req, res) => {
       description,
       price,
       quantity,
-      categoryId: category,
+      category_id: category,
     });
 
     return res.status(200).json({ message: "Published product", imageUrl });
@@ -110,7 +110,7 @@ export const updateProduct = async (req, res) => {
       description,
       price,
       quantity,
-      categoryId: category,
+      category_id: category,
     };
 
     // Si llegó una imagen nueva → subirla a imgbb
@@ -176,11 +176,11 @@ export const getLatest = async (req, res) => {
 };
 
 export const getForDay = async (req, res) => {
-  const { categoryId } = req.body;
+  const { category_id } = req.body;
 
   try {
     const forDay = await ProductModel.findAll({
-      where: { categoryId: categoryId },
+      where: { category_id: category_id },
     });
     return res.status(200).json(forDay);
   } catch (error) {

@@ -30,7 +30,7 @@ function ListProducts({ mode, listProducts, listTransactions }) {
 
   const filterQuantity = (id) => {
     if (mode === "purchases" || mode === "sold") {
-      const product = listTransactions.filter((t) => t.productId === id);
+      const product = listTransactions.filter((t) => t.product_id === id);
       return product[0].quantity;
     } else if (mode === "shoppingCart") {
       const shoppingList = JSON.parse(localStorage.getItem("shoppingContext"));
@@ -40,7 +40,7 @@ function ListProducts({ mode, listProducts, listTransactions }) {
   };
 
   const setStatePurchases = (id) => {
-    let transaction = listTransactions.filter((t) => t.productId === id);
+    let transaction = listTransactions.filter((t) => t.product_id === id);
     transaction = transaction[0].createdAt;
     return arrivalDays(transaction);
   };

@@ -21,8 +21,8 @@ export const getUserDatas = async (req, res) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const userId = decoded.userId;
-    const user = await UserModel.findOne({ where: { id: userId } });
+    const user_id = decoded.user_id;
+    const user = await UserModel.findOne({ where: { id: user_id } });
     res.status(200).json(user);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -46,20 +46,20 @@ export const registerGoogle = async (req, res) => {
     });
     const payload = ticket.getPayload();
 
-    let user = await UserModel.findOne({ where: { googleId: payload.sub } });
+    let user = await UserModel.findOne({ where: { google_id: payload.sub } });
 
     // Si el usuario no existe creamos un nuevo usuario
     if (!user) {
       user = await UserModel.create({
         email: payload.email,
-        googleId: payload.sub,
+        google_id: payload.sub,
         name: payload.name,
         picture: payload.picture,
       });
     }
 
     // Creamos el token para el front y enviamos
-    const jwtToken = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
+    const jwtToken = jwt.sign({ user_id: user.id }, process.env.JWT_SECRET, {
       expiresIn: "24h",
     });
     res.status(200).json({ token: jwtToken, userRole: user.role });

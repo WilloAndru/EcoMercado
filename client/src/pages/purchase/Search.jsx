@@ -26,7 +26,7 @@ function Search() {
         setProducts(filter);
         setProductsFilter(filter);
       } else if (idCategory) {
-        const filter = res.data.filter((p) => p.categoryId === idCategory);
+        const filter = res.data.filter((p) => p.category_id === idCategory);
         setSelectedCategory(idCategory);
         setProducts(res.data);
         setProductsFilter(filter);
@@ -42,7 +42,7 @@ function Search() {
 
   useEffect(() => {
     let filtered = products.filter(
-      (p) => p.categoryId === selectedCategory || selectedCategory === null
+      (p) => p.category_id === selectedCategory || selectedCategory === null
     );
 
     if (sortOrder === "menorprecio") {

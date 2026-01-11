@@ -32,7 +32,7 @@ function ColumProducts({ product }) {
       <td>{product.description}</td>
       <td>{product.price}</td>
       <td>{product.quantity}</td>
-      <td>{product.categoryId}</td>
+      <td>{product.category_id}</td>
       <td>{product.createdAt}</td>
       <td>{product.updatedAt}</td>
       <td className="center">
