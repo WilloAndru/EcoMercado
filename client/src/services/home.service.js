@@ -1,7 +1,7 @@
 import { api } from "../api/api";
 
 export const getHomeData = async () => {
-  const day = new Date().getDay();
+  const day = new Date().getDay() + 1;
 
   // Peticiones en paralelo para optimizar rendimiento
   const [categories, bestSellers, latest, forDay] = await Promise.all([

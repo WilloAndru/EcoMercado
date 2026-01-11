@@ -26,7 +26,4 @@ try {
   console.log(`Error ${error}`);
 }
 
-const PORT = 8000;
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en el puerto ${PORT}`);
-});
+export default app;
