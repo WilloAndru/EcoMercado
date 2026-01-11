@@ -1,0 +1,19 @@
+# Ignorar node_modules de client y server
+client/node_modules/
+server/node_modules/
+
+# Ignorar .env y variantes en client
+client/.env
+client/.env.*
+
+# Ignorar .env y variantes en server
+server/.env
+server/.env.*
+
+# Ignorar logs
+*.log
+
+# Ignorar carpetas de build
+client/dist/
+server/dist/
+build/
