@@ -1,3 +1,4 @@
+import pg from "pg";
 import { Sequelize } from "sequelize";
 
 const isProduction = process.env.NODE_ENV === "production";
@@ -10,6 +11,7 @@ const db = new Sequelize(
     host: process.env.PGHOST,
     port: Number(process.env.PGPORT) || 5432,
     dialect: "postgres",
+    dialectModule: pg,
     logging: false,
     dialectOptions: isProduction
       ? {
