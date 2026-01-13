@@ -3,8 +3,6 @@ import Footer from "./components/Footer";
 import Header from "./components/Header";
 import { useUser } from "../hooks/useUser";
 
-const URL = import.meta.env.VITE_API_URL;
-
 function MainLayout() {
   const { user, loading } = useUser();
   const isClient = !user || user.role === "client";
@@ -19,9 +17,11 @@ function MainLayout() {
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col items-center bg-bg">
       <Header user={user} />
-      <Outlet />
+      <main className="pt-45 pb-16 min-h-[88vh] w-full flex justify-center px-[2vw]">
+        <Outlet />
+      </main>
       {isClient && <Footer />}
     </div>
   );

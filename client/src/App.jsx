@@ -21,6 +21,8 @@ import EditSales from "./pages/userOptions/EditSales";
 import ProfileSales from "./pages/userOptions/ProfileSales";
 import AuthLogin from "./pages/auth/AuthLogin";
 
+import ProtectedRoute from "./routes/ProtectedRoute";
+
 function App() {
   return (
     <Router>
@@ -28,7 +30,14 @@ function App() {
         {/* Rutas con Header y Footer */}
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
-          <Route path="/profile" element={<Profile />} />
+
+          <Route element={<ProtectedRoute />}>
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/publishProduct/:id" element={<PublishProduct />} />
+            <Route path="/editSales" element={<EditSales />} />
+            <Route path="/profileSales" element={<ProfileSales />} />
+            <Route path="/profilePurchases" element={<ProfilePurchases />} />
+          </Route>
 
           <Route path="/admin" element={<Admin />} />
           <Route path="/admin/users" element={<AdminUsers />} />
@@ -39,12 +48,7 @@ function App() {
           <Route path="/search" element={<Search />} />
           <Route path="/product/:id" element={<ViewProduct />} />
           <Route path="/buyProduct/:type" element={<BuyProduct />} />
-
           <Route path="/shoppingCart" element={<ShoppingCart />} />
-          <Route path="/publishProduct/:id" element={<PublishProduct />} />
-          <Route path="/editSales" element={<EditSales />} />
-          <Route path="/profileSales" element={<ProfileSales />} />
-          <Route path="/profilePurchases" element={<ProfilePurchases />} />
         </Route>
 
         {/* Rutas sin Header ni Footer */}

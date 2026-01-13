@@ -1,60 +1,54 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { IoSaveOutline } from "react-icons/io5";
-import { useNavigate } from "react-router-dom";
-
-const URL = import.meta.env.VITE_API_URL;
+import { api } from "../api/api";
 
 function InputComponent(props) {
-  const [saveEmail, setSaveEmail] = useState("");
+  const saveEmail = useState(localStorage.getItem("saveEmail"));
   const [editing, setEditing] = useState(false);
   const [inputValue, setInputValue] = useState(props.content || "");
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    setInputValue(props.content || "");
-    setSaveEmail(localStorage.getItem("saveEmail"));
-  }, [props.content]);
 
   const handleEditClick = (event) => {
     event.preventDefault();
     setEditing(true);
-    if (props.link) {
-      navigate(props.link);
-      window.location.reload();
-    }
   };
 
   const handleSaveClick = async (event) => {
     event.preventDefault();
     setEditing(false);
-    await axios.post(`${URL}/profile`, {
-      email: saveEmail,
-      attribute: props.attribute,
-      value: inputValue,
-    });
+    try {
+      await api.post("/profile", {
+        email: saveEmail,
+        attribute: props.attribute,
+        value: inputValue,
+      });
+    } catch (error) {
+      console.error("Error updating profile:", error);
+    }
   };
 
   return (
     <form
-      className="flex1 inputProfile"
+      className="flex justify-between w-full items-start"
       onSubmit={editing ? handleSaveClick : handleEditClick}
     >
-      <div className="flex1 inputDiv">
-        <label>{props.label}</label>
+      <div className="flex flex-col gap-4 items-start w-full">
+        <h4>{props.label}</h4>
         <input
-          className={editing ? "inputFocus" : "input"}
+          className={`rounded-xl border border-bg w-[80%] -ml-5 ${
+            editing && "border-gray-500 ml-0"
+          }`}
           value={inputValue}
           readOnly={!editing}
+          placeholder={`Enter your ${props.label}`}
           onChange={(e) => setInputValue(e.target.value)}
         />
       </div>
       <button type="submit" style={{ display: props.disabled && "none" }}>
         {editing ? (
-          <IoSaveOutline className="icon" />
+          <IoSaveOutline className="text-3xl" />
         ) : (
-          <FaEdit className="icon" />
+          <FaEdit className="text-3xl" />
         )}
       </button>
     </form>

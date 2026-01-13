@@ -97,7 +97,7 @@ function SliderContainer(props) {
                   alt={e.name}
                 />
                 <p>{e.name}</p>
-                {e.price ? <h4>{formatPrice(e.price)}</h4> : null}
+                {e.price ? <h5>{formatPrice(e.price)}</h5> : null}
               </button>
             );
           })}

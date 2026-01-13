@@ -25,18 +25,6 @@ html {
   gap: 1rem;
 }
 
-.input {
-  border: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0.6rem 0;
-  width: 100%;
-
-  &:focus {
-    outline: none;
-  }
-}
-
 .btn {
   border-radius: 2rem;
   background-color: #49cb5c;
@@ -87,10 +75,6 @@ html {
 
 .select__option--is-selected {
   background-color: var(--primaryColor);
-}
-
-.icon {
-  font-size: 1.5rem;
 }
 
 //COMPONENTS STYLES
@@ -280,42 +264,6 @@ html {
   padding-right: 10vw;
   text-align: center;
   padding-bottom: 10vh;
-}
-
-.profile {
-  padding: 20vh 25% 0 25%;
-
-  .inputProfile {
-    max-width: 800px;
-    width: 100%;
-
-    .inputDiv {
-      width: 100%;
-      align-items: flex-start;
-      flex-direction: column;
-
-      * {
-        font-size: 1.2rem;
-      }
-
-      label {
-        font-weight: bold;
-      }
-
-      .inputFocus {
-        background-color: white;
-        border-radius: 1rem;
-        padding: 0.6rem 1.2rem;
-        border: 1px var(--greyColor) solid;
-      }
-    }
-
-    button:hover {
-      * {
-        color: var(--primaryColor);
-      }
-    }
-  }
 }
 
 .search {

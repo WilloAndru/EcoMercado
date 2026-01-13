@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
-
-const URL = import.meta.env.VITE_API_URL;
+import { api } from "../api/api";
 
 export const useUser = () => {
   const [user, setUser] = useState(null);
@@ -15,7 +13,7 @@ export const useUser = () => {
         return;
       }
       try {
-        const response = await axios.get(`${URL}/getUserDatas`, {
+        const response = await api.get("/getUserDatas", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUser(response.data);

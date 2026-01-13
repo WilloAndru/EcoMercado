@@ -20,20 +20,20 @@ function Profile() {
         label={data.name}
         content={data.content}
         disabled={data.disabled}
-        link={data.link}
       />
     );
   });
 
   return (
-    <div className="profile page flex1">
-      <section className="flex1 w-full">
+    <div className="flex flex-col items-center gap-8 w-100 md:w-180">
+      {/* Seccion de img y nombre */}
+      <section className="flex gap-6 items-center">
         <img
-          className="rounded-full w-24 object-cover"
+          className="rounded-full w-20 object-cover"
           src={user.picture}
           alt="Image profile"
         />
-        <h3>{user.name}</h3>
+        <h2>{user.name}</h2>
       </section>
       {inputs}
     </div>

@@ -26,7 +26,7 @@ function Home() {
   }, []);
 
   return (
-    <div className="flex flex-col bg-bg gap-16 w-full pt-50 px-10 pb-16 text-center items-center">
+    <div className="flex flex-col gap-16 w-full text-center items-center">
       <h1>Buy and Sell Sustainable Products on EcoMercado</h1>
 
       <SliderContainer
