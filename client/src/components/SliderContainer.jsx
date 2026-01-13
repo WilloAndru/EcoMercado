@@ -3,56 +3,17 @@ import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
 import { formatPrice } from "../utils/formatPrice";
 import { useNavigate } from "react-router-dom";
 
+// Slider reutilizable tanto para categorias como productos
 function SliderContainer(props) {
   const [slide, setSlide] = useState({ position: 0, index: 0 });
   const maxImages = 15;
   const imageWidth = 16;
   const maxVisibleImg = 5;
+  const numberSpans = Math.ceil(props.list.length / maxVisibleImg);
   const navigate = useNavigate();
 
-  const goCategoryInterface = (id) => {
-    localStorage.removeItem("valueInput");
-    localStorage.setItem("idCategory", id);
-    window.location.href = "/search";
-  };
-
-  const goProductInterface = (id) => {
-    navigate(`/product/${id}`);
-  };
-
-  const elements = props.list.slice(0, maxImages).map((e, index) => {
-    return (
-      <button
-        className={`${props.className}Btn flex1`}
-        key={index}
-        onClick={
-          props.className === "category"
-            ? () => goCategoryInterface(e.id)
-            : () => goProductInterface(e.id)
-        }
-      >
-        <img src={e.image} alt={e.name} />
-        <p>{e.name}</p>
-        {e.price ? <h3>{formatPrice(e.price)}</h3> : null}
-      </button>
-    );
-  });
-
   let canMoveLeft = slide.position > 0;
-  let canMoveRight =
-    slide.position < (elements.length - maxVisibleImg) * imageWidth;
-
-  const listSpans = [];
-  if (elements.length > maxVisibleImg) {
-    for (let i = 0; i < elements.length / maxVisibleImg; i++) {
-      listSpans.push(
-        <span
-          key={i}
-          style={{ background: slide.index === i ? "#49cb5c" : "" }}
-        ></span>
-      );
-    }
-  }
+  let canMoveRight = slide.index + 1 !== numberSpans;
 
   const moveSlider = (direction) => {
     setSlide((prevState) => {
@@ -72,33 +33,79 @@ function SliderContainer(props) {
   };
 
   return (
-    <div className={`${props.className}Container flex1`}>
+    <div className="flex items-center gap-[1vw]">
       {/* Flecha Izquierda */}
       <button
-        className="arrowBtn flex1"
+        className="text-3xl hover:text-primary"
         onClick={() => moveSlider("left")}
         style={{ visibility: canMoveLeft ? "visible" : "hidden" }}
       >
         <FaArrowLeft />
       </button>
       {/* Slider */}
-      <div className={`${props.className}Div flex1`}>
+      <section
+        className={`flex items-start gap-1 flex-col overflow-hidden w-[81vw] py-2 px-[1vw] ${
+          props.className === "product" ? "bg-white rounded-xl" : "gap-8"
+        }`}
+      >
         {/* Header */}
-        <div className="headerDiv flex1">
+        <div className="w-full justify-between flex items-center">
           <h2>{props.title}</h2>
-          <div className="flex1">{listSpans}</div>
+          {/* Spans */}
+          {props.className === "product" && (
+            <div className="flex items-center gap-3">
+              {Array.from({ length: numberSpans }, (_, i) => (
+                <span
+                  key={i}
+                  className="bg-gray-300 w-4 h-4 rounded-full"
+                  style={{ background: slide.index === i ? "#49cb5c" : "" }}
+                ></span>
+              ))}
+            </div>
+          )}
         </div>
         {/* Contenedor Productos */}
         <div
-          className={`${props.className}List flex1`}
+          className={`flex gap-[1vw] mt-2 transition-transform duration-500 ease-in-out flex-start`}
           style={{ transform: `translateX(-${slide.position}vw)` }}
         >
-          {elements}
+          {props.list.slice(0, maxImages).map((e, index) => {
+            return (
+              <button
+                className={`flex flex-col gap-1 overflow-hidden w-[15vw] hover:animate-[slide-top_0.2s_linear_both] ${
+                  props.className === "product"
+                    ? "text-start items-start"
+                    : "items-center"
+                }`}
+                key={index}
+                onClick={
+                  props.className === "category"
+                    ? () => {
+                        localStorage.setItem("idCategory", e.id);
+                        navigate("/search");
+                      }
+                    : () => navigate(`/product/${e.id}`)
+                }
+              >
+                <img
+                  className={
+                    props.className === "product"
+                      ? "h-60 rounded-xl w-[15vw] object-cover"
+                      : "w-12"
+                  }
+                  src={e.image}
+                  alt={e.name}
+                />
+                <p>{e.name}</p>
+                {e.price ? <h4>{formatPrice(e.price)}</h4> : null}
+              </button>
+            );
+          })}
         </div>
-      </div>
+      </section>
       {/* Flecha derecha */}
       <button
-        className="arrowBtn flex1"
+        className="text-3xl hover:text-primary"
         onClick={() => moveSlider("right")}
         style={{ visibility: canMoveRight ? "visible" : "hidden" }}
       >

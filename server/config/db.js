@@ -1,4 +1,4 @@
-import pg from "pg";
+import pg from "pg"; // IMPORTANTE, PARA FORZAR A VERCEL SERVERLESS A USAR PG
 import { Sequelize } from "sequelize";
 
 const isProduction = process.env.NODE_ENV === "production";

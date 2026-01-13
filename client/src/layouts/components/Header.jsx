@@ -47,7 +47,7 @@ function Header({ user }) {
         {isClient && (
           <form
             onSubmit={goSearchInterface}
-            className="flex border border-bg rounded-2xl overflow-hidden"
+            className="flex border border-bg rounded-xl overflow-hidden"
           >
             <input
               type="text"
