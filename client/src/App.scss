@@ -414,14 +414,8 @@ html {
 }
 
 .profilePurchases {
-  padding: 16vh 4vw 4vh;
-  justify-content: center;
-
   .divPurchases {
-    min-height: 70vh;
-    width: 100%;
-    max-width: 1000px;
-    gap: 2rem;
+    gap: 1rem;
     flex-direction: column;
 
     .listProducts {

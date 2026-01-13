@@ -145,11 +145,11 @@ function ListProducts({ mode, listProducts, listTransactions }) {
   );
 
   return (
-    <div className="listProducts flex1">
-      <div className="flex1 div1">{ListProducts}</div>
+    <div className="listProducts">
+      <div className="flex div1">{ListProducts}</div>
 
       {listProducts.length > productsForPage && (
-        <div className="div2 flex1">{listBtnPages}</div>
+        <div className="div2 flex">{listBtnPages}</div>
       )}
     </div>
   );

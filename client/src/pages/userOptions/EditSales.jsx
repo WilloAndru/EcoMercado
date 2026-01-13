@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import ListProducts from "../../components/ListProducts";
-import axios from "axios";
 import { RiPlantLine } from "react-icons/ri";
-
-const URI = import.meta.env.VITE_API_URL;
+import { api } from "../../api/api";
 
 function EditSales() {
   const [products, setProducts] = useState([]);
@@ -11,7 +9,7 @@ function EditSales() {
 
   useEffect(() => {
     const getProductsSales = async () => {
-      const res = await axios.get(`${URI}/salesProducts`, {
+      const res = await api.get("/salesProducts", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -22,15 +20,14 @@ function EditSales() {
   }, []);
 
   return (
-    <div className="profilePurchases page flex1">
+    <div className="profilePurchases flex">
       {products.length > 0 ? (
-        <div className="divPurchases flex1">
+        <div className="divPurchases flex">
           <h1>Published Sales</h1>
-
           <ListProducts mode="sales" listProducts={products} />
         </div>
       ) : (
-        <div className="divPurchases2 flex1">
+        <div className="divPurchases2 flex">
           <RiPlantLine className="icon" />
           <h1>You haven't published any sales yet</h1>
         </div>
