@@ -16,11 +16,11 @@ button {
 }
 
 input {
-  @apply focus:outline-0 px-5 py-3 bg-bg;
+  @apply focus:outline-0 px-5 py-3;
 }
 
 .btn-1 {
-  @apply text-white px-5 py-3 hover:bg-hover border border-bg rounded-2xl font-bold h-fit;
+  @apply text-white px-5 py-3 bg-primary hover:bg-hover border border-bg rounded-2xl font-bold h-fit;
 }
 
 h1,

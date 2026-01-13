@@ -54,7 +54,7 @@ function Header({ user }) {
               value={query}
               placeholder="Search products"
               onChange={(e) => onChange(e.target.value)}
-              className="w-50 md:w-70"
+              className="w-50 md:w-70 bg-bg"
             />
 
             <button

@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Select from "react-select";
@@ -22,6 +22,7 @@ function PublishProduct() {
   const [counterDescription, setCounterDescription] = useState(0);
   const navigate = useNavigate();
   const { idProduct } = useParams();
+  const isEditMode = idProduct > 0;
 
   useEffect(() => {
     let categories = [];
@@ -31,7 +32,7 @@ function PublishProduct() {
       setCategoriesName(res.data);
     };
     getCategoriesName();
-    if (idProduct > 0) {
+    if (isEditMode) {
       const getEditProduct = async () => {
         const res = await axios.get(`${URI}/product/${idProduct}`);
         setName(res.data.name);
@@ -57,10 +58,9 @@ function PublishProduct() {
 
   const handleButton = (e) => {
     e.preventDefault();
-    const action = e.nativeEvent.submitter.name;
     const formData = new FormData(e.target);
 
-    if (action === "publish") {
+    if (!isEditMode) {
       const createProduct = async () => {
         const resProduct = await axios.post(`${URI}/publishProduct`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
@@ -77,7 +77,7 @@ function PublishProduct() {
         }
       };
       createProduct();
-    } else if (action === "update") {
+    } else {
       const updateProduct = async () => {
         const res = await axios.patch(
           `${URI}/updateProduct/${idProduct}`,
@@ -98,13 +98,13 @@ function PublishProduct() {
   const handleEditName = (e) => {
     setCounterName(e.target.value.length);
     setName(e.target.value);
-    idProduct > 0 && setIsChange(true);
+    isEditMode && setIsChange(true);
   };
 
   const handleEditDescription = (e) => {
     setCounterDescription(e.target.value.length);
     setDescription(e.target.value);
-    idProduct > 0 && setIsChange(true);
+    isEditMode && setIsChange(true);
   };
 
   const handleImageChange = (value) => {
@@ -116,7 +116,7 @@ function PublishProduct() {
         setSelectedImage(reader.result);
       };
       reader.readAsDataURL(file);
-      idProduct > 0 && setIsChange(true);
+      isEditMode && setIsChange(true);
     } else {
       const uint8Array = new Uint8Array(value);
       const binaryString = String.fromCharCode.apply(null, uint8Array);
@@ -129,24 +129,33 @@ function PublishProduct() {
 
   const handleEditPrice = (e) => {
     setPrice(e.target.value);
-    idProduct > 0 && setIsChange(true);
+    isEditMode && setIsChange(true);
   };
 
   const handleEditQuantity = (e) => {
     setQuantity(e.target.value);
-    idProduct > 0 && setIsChange(true);
+    isEditMode && setIsChange(true);
   };
 
   const handleEditCategory = (value) => {
     setCategoryName(value);
-    idProduct > 0 && setIsChange(true);
+    isEditMode && setIsChange(true);
   };
 
-  return (
-    <form className="publishProduct page flex1" onSubmit={handleButton}>
-      <h1>{idProduct > 0 ? "Edit Product" : "Publish Product"}</h1>
+  const cardBase =
+    "flex gap-4 items-center bg-white p-8 px-12 rounded-xl w-full max-w-[800px] flex items-start flex-col";
 
-      <div className="flex1 div">
+  const inputsBase = "w-full p-2 rounded-xl border border-gray-400";
+
+  return (
+    <form
+      className="-mt-6 gap-10 flex flex-col items-center"
+      onSubmit={handleButton}
+    >
+      {/* Titulo */}
+      <h1>{isEditMode ? "Edit Product" : "Publish Product"}</h1>
+      {/* Nombre*/}
+      <div className={cardBase}>
         <h2>Name</h2>
         <label>
           Clear and concise name; you can also use keywords to improve
@@ -154,6 +163,7 @@ function PublishProduct() {
         </label>
         <input
           type="text"
+          className={inputsBase}
           name="name"
           value={name}
           onChange={handleEditName}
@@ -164,8 +174,8 @@ function PublishProduct() {
           {counterName}/{maxName}
         </span>
       </div>
-
-      <div className="flex1 div">
+      {/* Descripcion */}
+      <div className={cardBase}>
         <h2>Description</h2>
         <label>
           Detailed description highlighting the product’s most important
@@ -173,6 +183,7 @@ function PublishProduct() {
         </label>
         <textarea
           type="text"
+          className={`h-32 resize-none outline-0 ${inputsBase}`}
           name="description"
           value={description}
           onChange={handleEditDescription}
@@ -183,46 +194,55 @@ function PublishProduct() {
           {counterDescription}/{maxDescription}
         </span>
       </div>
-
-      <div className="flex1 div">
+      {/* Imagen */}
+      <div className={cardBase}>
         <h2>Image</h2>
         <label>Full image of the product in any format</label>
-        <div onClick={handleInputImg} className="imgDiv flex1">
+        <div
+          onClick={handleInputImg}
+          className="w-full overflow-hidden p-0 cursor-pointer h-64 flex-col flex gap-4 justify-center text-gray-400"
+        >
           {selectedImage ? (
-            <img src={selectedImage} alt="Selected" className="previewImg" />
+            <img
+              src={selectedImage}
+              alt="Selected"
+              className="w-fit object-cover h-full rounded-xl"
+            />
           ) : (
-            <>
+            <div className="flex flex-col items-center justify-center text-8xl rounded-xl border border-gray-400 w-full h-full">
               <MdAddPhotoAlternate />
-              Select an image
-            </>
+              <p className="text-base">Select an image</p>
+            </div>
           )}
         </div>
         <input
-          className="imgInput"
+          className="hidden"
           name="image"
           onChange={handleImageChange}
           ref={fileInputRef}
           type="file"
         />
       </div>
-
-      <div className="flex1 div">
+      {/* Precio */}
+      <div className={cardBase}>
         <h2>Price</h2>
         <label>What will be the price of the product?</label>
         <input
           name="price"
+          className={inputsBase}
           value={price}
           onChange={handleEditPrice}
           type="number"
           required
         />
       </div>
-
-      <div className="flex1 div">
+      {/* Unidades */}
+      <div className={cardBase}>
         <h2>Units</h2>
         <label>How many units are available?</label>
         <input
           name="quantity"
+          className={inputsBase}
           type="number"
           value={quantity}
           onChange={handleEditQuantity}
@@ -230,8 +250,8 @@ function PublishProduct() {
           required
         />
       </div>
-
-      <div className="flex1 div">
+      {/* Categoria */}
+      <div className={cardBase}>
         <h2>Category</h2>
         <label>Which category does the product belong to?</label>
         <Select
@@ -246,18 +266,10 @@ function PublishProduct() {
           required
         />
       </div>
-
-      {idProduct > 0 ? (
-        isChange && (
-          <button type="submit" name="update" className="btn">
-            Update Product
-          </button>
-        )
-      ) : (
-        <button type="submit" name="publish" className="btn">
-          Publish Product
-        </button>
-      )}
+      {/* Boton de publicar/editar */}
+      <button type="submit" className="btn-1 text-xl">
+        {isEditMode ? "Update Product" : "Publish Product"}
+      </button>
     </form>
   );
 }
