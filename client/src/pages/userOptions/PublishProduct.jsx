@@ -1,10 +1,8 @@
 import { useRef, useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
 import Select from "react-select";
 import { MdAddPhotoAlternate } from "react-icons/md";
-
-const URI = import.meta.env.VITE_API_URL;
+import { api } from "../../api/api";
 
 function PublishProduct() {
   const maxName = 64;
@@ -27,19 +25,19 @@ function PublishProduct() {
   useEffect(() => {
     let categories = [];
     const getCategoriesName = async () => {
-      const res = await axios.get(`${URI}/categories`);
+      const res = await api.get("/categories");
       categories = res.data;
       setCategoriesName(res.data);
     };
     getCategoriesName();
     if (isEditMode) {
       const getEditProduct = async () => {
-        const res = await axios.get(`${URI}/product/${idProduct}`);
+        const res = await api.get(`/product/${idProduct}`);
         setName(res.data.name);
         setCounterName(res.data.name.length);
         setDescription(res.data.description);
         setCounterDescription(res.data.description.length);
-        handleImageChange(res.data.image.data);
+        setSelectedImage(res.data.image);
         setPrice(res.data.price);
         setQuantity(res.data.quantity);
         setCategoryName(
@@ -62,11 +60,11 @@ function PublishProduct() {
 
     if (!isEditMode) {
       const createProduct = async () => {
-        const resProduct = await axios.post(`${URI}/publishProduct`, formData, {
+        const resProduct = await api.post(`/publishProduct`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
         if (resProduct.status === 200) {
-          const resTransaction = await axios.post(`${URI}/createSale`, {
+          const resTransaction = await api.post(`/createSale`, {
             token: localStorage.getItem("token"),
             productName: formData.get("name"),
           });
@@ -79,13 +77,9 @@ function PublishProduct() {
       createProduct();
     } else {
       const updateProduct = async () => {
-        const res = await axios.patch(
-          `${URI}/updateProduct/${idProduct}`,
-          formData,
-          {
-            headers: { "Content-Type": "multipart/form-data" },
-          }
-        );
+        const res = await api.patch(`/updateProduct/${idProduct}`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
         if (res.status === 200) {
           alert("Item updated successfully");
           navigate("/profileSales");
@@ -259,7 +253,7 @@ function PublishProduct() {
           name="category"
           value={categoryName || { value: 1, label: "Sustainable energy" }}
           onChange={handleEditCategory}
-          className="selectContainer"
+          className="w-full"
           options={categoriesName.map((c) => {
             return { value: c.id, label: c.name };
           })}
@@ -267,9 +261,17 @@ function PublishProduct() {
         />
       </div>
       {/* Boton de publicar/editar */}
-      <button type="submit" className="btn-1 text-xl">
-        {isEditMode ? "Update Product" : "Publish Product"}
-      </button>
+      {isEditMode ? (
+        isChange && (
+          <button type="submit" className="btn-1 text-xl">
+            Update Product
+          </button>
+        )
+      ) : (
+        <button type="submit" className="btn-1 text-xl">
+          Publish Product
+        </button>
+      )}
     </form>
   );
 }

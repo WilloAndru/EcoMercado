@@ -54,29 +54,6 @@ html {
   display: none;
 }
 
-.selectContainer {
-  width: 100%;
-}
-
-.select__control {
-  box-shadow: none;
-  width: 100%;
-
-  &:hover {
-    border-color: #555;
-  }
-}
-
-.select__option {
-  &:hover {
-    background-color: var(--hoverColor);
-  }
-}
-
-.select__option--is-selected {
-  background-color: var(--primaryColor);
-}
-
 //COMPONENTS STYLES
 
 .listProducts {

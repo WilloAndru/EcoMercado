@@ -33,7 +33,10 @@ function App() {
 
           <Route element={<ProtectedRoute />}>
             <Route path="/profile" element={<Profile />} />
-            <Route path="/publishProduct/:id" element={<PublishProduct />} />
+            <Route
+              path="/publishProduct/:idProduct"
+              element={<PublishProduct />}
+            />
             <Route path="/editSales" element={<EditSales />} />
             <Route path="/profileSales" element={<ProfileSales />} />
             <Route path="/profilePurchases" element={<ProfilePurchases />} />
