@@ -1,4 +1,4 @@
-# Acerca del proyecto EcoMercado
+# Acerca de EcoMercado
 
 ![Logo](./images/1.png)
 
@@ -14,7 +14,7 @@ Este proyecto marcó mi primer paso en desarrollo web full stack. Inicialmente d
 
 ## Características
 
-- Autenticación segura de usuario usando firebase con autenticaion de google
+- Autenticación segura de usuario usando google OAuth 2.0
   ![Logo](./images/2.png)
 - Búsqueda avanzada con filtrado y paginación de productos
 - Carrito de compras funcional

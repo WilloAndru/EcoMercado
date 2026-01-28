@@ -38,9 +38,9 @@ function AuthLogin() {
 
   return (
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-      <form className="flex1">
+      <form className="flex items-center flex-col p-[4vw] gap-6">
         {/* Titulo */}
-        <div className="div1 flex1">
+        <div className="flex flex-col">
           <h2>Login or Sign Up</h2>
           <p>Use your email or another service to access EcoMercado.</p>
         </div>
@@ -52,7 +52,6 @@ function AuthLogin() {
         <GoogleLogin
           onSuccess={handleLoginGoogle}
           onError={(error) => {
-            console.log("Login Failed", error);
             setError(error);
           }}
         />
