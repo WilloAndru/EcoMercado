@@ -43,7 +43,7 @@ function PublishProduct() {
         setCategoryName(
           categories
             .filter((c) => c.id === res.data.category_id)
-            .map((c) => ({ value: c.id, label: c.name }))[0]
+            .map((c) => ({ value: c.id, label: c.name }))[0],
         );
       };
       getEditProduct();
@@ -82,7 +82,7 @@ function PublishProduct() {
         });
         if (res.status === 200) {
           alert("Item updated successfully");
-          navigate("/profileSales");
+          navigate("/editSales");
         }
       };
       updateProduct();

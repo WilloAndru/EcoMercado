@@ -45,22 +45,6 @@ function ListProducts({ mode, listProducts, listTransactions }) {
     return arrivalDays(transaction);
   };
 
-  const deleteProduct = (id) => {
-    const confirmed = window.confirm(
-      "Are you sure you want to delete the product?",
-    );
-    if (confirmed) {
-      const deleteProduct = async () => {
-        const res = await axios.delete(`${URI}/deleteProduct/${id}`);
-        if (res.status === 200) {
-          alert("Product deleted");
-          window.location.reload();
-        }
-      };
-      deleteProduct();
-    }
-  };
-
   const ListProducts = listProducts
     .slice((currentPage - 1) * productsForPage, currentPage * productsForPage)
     .map((p) => {

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import ListProducts from "../../components/ListProducts";
-import axios from "axios";
 import { RiPlantLine } from "react-icons/ri";
+import { api } from "../../api/api";
 
 const URI = import.meta.env.VITE_API_URL;
 
@@ -12,13 +12,17 @@ function ProfileSales() {
 
   useEffect(() => {
     const getSoldProducts = async () => {
-      const res = await axios.get(`${URI}/soldProducts`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setProducts(res.data.products);
-      setTransactions(res.data.transactions);
+      try {
+        const res = await api.get(`${URI}/soldProducts`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setProducts(res.data.products);
+        setTransactions(res.data.transactions);
+      } catch (error) {
+        alert("Something went wrong while getting sold products.");
+      }
     };
     getSoldProducts();
   }, []);
@@ -36,8 +40,8 @@ function ProfileSales() {
           />
         </div>
       ) : (
-        <div className="divPurchases2 flex1">
-          <RiPlantLine className="icon" />
+        <div className="flex flex-col items-center gap-6 text-gray-400">
+          <RiPlantLine className="text-8xl" />
           <h1>No products have been purchased from you yet</h1>
         </div>
       )}
