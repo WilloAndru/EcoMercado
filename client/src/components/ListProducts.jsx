@@ -60,7 +60,6 @@ function ListProducts({ mode, listProducts, listTransactions }) {
             <div className="flex1 div">
               <h2>{p.name}</h2>
 
-              {(!mode || mode === "sales") && <h3>{formatPrice(p.price)}</h3>}
               {mode === "shoppingCart" && (
                 <h3>{formatPrice(p.price * filterQuantity(p.id))}</h3>
               )}
@@ -80,7 +79,6 @@ function ListProducts({ mode, listProducts, listTransactions }) {
               {mode === "purchases" && (
                 <h4>Units Purchased: {filterQuantity(p.id)}</h4>
               )}
-              {mode === "sales" && <h4>Available Units: {p.quantity}</h4>}
               {mode === "sold" && <h4>Units Sold: {filterQuantity(p.id)}</h4>}
 
               {mode === "purchases" && <h4>{setStatePurchases(p.id)}</h4>}
