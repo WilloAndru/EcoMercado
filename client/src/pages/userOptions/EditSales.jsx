@@ -20,15 +20,15 @@ function EditSales() {
   }, []);
 
   return (
-    <div className="profilePurchases flex">
+    <div className="flex items-center justify-center">
       {products.length > 0 ? (
-        <div className="divPurchases flex">
+        <div className="flex flex-col gap-4">
           <h1>Published Sales</h1>
           <ListProducts mode="sales" listProducts={products} />
         </div>
       ) : (
-        <div className="divPurchases2 flex">
-          <RiPlantLine className="icon" />
+        <div className="flex flex-col items-center gap-6 text-gray-400">
+          <RiPlantLine className="text-8xl" />
           <h1>You haven't published any sales yet</h1>
         </div>
       )}

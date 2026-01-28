@@ -38,10 +38,10 @@ function AuthLogin() {
 
   return (
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-      <form className="flex items-center flex-col p-[4vw] gap-6">
+      <form className="flex items-center flex-col px-10 gap-10 justify-center">
         {/* Titulo */}
-        <div className="flex flex-col">
-          <h2>Login or Sign Up</h2>
+        <div className="flex flex-col gap-4">
+          <h2 className="text-center">Login or Sign Up</h2>
           <p>Use your email or another service to access EcoMercado.</p>
         </div>
         {/* Mensaje de error */}

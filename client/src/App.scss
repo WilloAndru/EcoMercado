@@ -57,8 +57,6 @@ html {
 //COMPONENTS STYLES
 
 .listProducts {
-  position: relative;
-  left: 27%;
   flex-direction: column;
   width: 71vw;
   gap: 2rem;
@@ -292,33 +290,6 @@ html {
       padding: 1.2rem;
       font-size: 1rem;
       width: 50%;
-    }
-  }
-}
-
-.profilePurchases {
-  .divPurchases {
-    gap: 1rem;
-    flex-direction: column;
-
-    .listProducts {
-      left: 0;
-      width: 100%;
-    }
-  }
-
-  .divPurchases2 {
-    width: 100%;
-    gap: 2rem;
-    flex-direction: column;
-
-    * {
-      color: var(--greyColor);
-      text-align: center;
-    }
-
-    .icon {
-      font-size: 10rem;
     }
   }
 }

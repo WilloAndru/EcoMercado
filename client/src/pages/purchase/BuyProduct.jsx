@@ -29,7 +29,7 @@ function BuyProduct() {
     return (
       <tr key={i}>
         <td>
-          {product.name}{" "}
+          {product.name}
           {product.quantity > 1 ? `${product.quantity} unidades` : ""}
         </td>
         <td>{formatPrice(product.price * product.quantity)}</td>
@@ -60,7 +60,7 @@ function BuyProduct() {
       formData.get("cardNumber"),
       formData.get("expiryDate"),
       formData.get("cvv"),
-      formData.get("cardHolderName")
+      formData.get("cardHolderName"),
     );
     if (validationMessage) {
       setError(validationMessage);
@@ -79,7 +79,7 @@ function BuyProduct() {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
-          }
+          },
         );
         if (res.status === 200) {
           products.length >= 1

@@ -47,7 +47,7 @@ function ListProducts({ mode, listProducts, listTransactions }) {
 
   const deleteProduct = (id) => {
     const confirmed = window.confirm(
-      "Are you sure you want to delete the product?"
+      "Are you sure you want to delete the product?",
     );
     if (confirmed) {
       const deleteProduct = async () => {
@@ -141,7 +141,7 @@ function ListProducts({ mode, listProducts, listTransactions }) {
           {i + 1}
         </button>
       );
-    }
+    },
   );
 
   return (
