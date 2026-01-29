@@ -21,26 +21,53 @@ function ShoppingCart() {
     fetchProducts();
   }, []);
 
+  const filterQuantity = (id) => {
+    const shoppingList = JSON.parse(localStorage.getItem("shoppingContext"));
+    const product = shoppingList.filter((i) => i.id === String(id));
+    return product[0].quantity;
+  };
+
   const cleanContext = () => {
     localStorage.removeItem("shoppingContext");
     navigate("/");
   };
 
+  const deleteProductShoppingCart = (id) => {
+    const shoppingList = JSON.parse(localStorage.getItem("shoppingContext"));
+    if (shoppingList.length > 1) {
+      const updatedList = shoppingList.filter((i) => i.id !== String(id));
+      localStorage.setItem("shoppingContext", JSON.stringify(updatedList));
+      window.location.reload();
+    } else {
+      localStorage.removeItem("shoppingContext");
+      navigate("/");
+    }
+  };
+
   return (
-    <div className="flex flex-col gap-4 md:w-2/3 max-w-180 items-center justify-center">
+    <div className="flex flex-col gap-4 items-center justify-center">
       <h1>Cart items</h1>
       <div className="flex flex-col p-4 rounded-xl bg-white gap-4">
         {products.map((p, i) => (
-          <div key={i} className="flex items-center gap-6">
-            <img
-              className="w-60 max-h-40 rounded-xl object-cover"
-              src={p.image}
-              alt="img"
-            />
-            <div className="flex flex-col gap-2">
-              <h2>{p.name}</h2>
-              <h4>{formatPrice(p.price)}</h4>
+          <div key={i} className="flex gap-50 justify-between">
+            <div className="flex gap-6 items-center">
+              <img
+                className="w-60 max-h-40 rounded-xl object-cover"
+                src={p.image}
+                alt="img"
+              />
+              <div className="flex flex-col gap-2">
+                <h2>{p.name}</h2>
+                <h3>{formatPrice(p.price * filterQuantity(p.id))}</h3>
+                <h4>Units: {filterQuantity(p.id)}</h4>
+              </div>
             </div>
+            <button
+              className="btn-red h-full"
+              onClick={() => deleteProductShoppingCart(p.id)}
+            >
+              Remove
+            </button>
           </div>
         ))}
         <div className="flex gap-4">
