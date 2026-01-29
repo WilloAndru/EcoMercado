@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { formatPrice } from "../../utils/formatPrice";
-
-const URI = import.meta.env.VITE_API_URL;
+import { api } from "../../api/api";
 
 function AdminDatas() {
   const profitsPorcent = 10;
@@ -13,19 +11,19 @@ function AdminDatas() {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const res = await axios.get(`${URI}/usersCount`);
+      const res = await api.get(`/usersCount`);
       setNumUsers(res.data);
     };
     const fetchProducts = async () => {
-      const res = await axios.get(`${URI}/productsCount`);
+      const res = await api.get(`/productsCount`);
       setNumProducts(res.data);
     };
     const fetchBestSellers = async () => {
-      const res = await axios.get(`${URI}/bestSellers`);
+      const res = await api.get(`/bestSellers`);
       setBestSellers(res.data);
     };
     const fetchProfits = async () => {
-      const res = await axios.get(`${URI}/profits`);
+      const res = await api.get(`/profits`);
       setProfits((res.data * profitsPorcent) / (100 + profitsPorcent));
     };
     fetchUsers();
@@ -42,21 +40,24 @@ function AdminDatas() {
     );
   });
 
+  const divStyle =
+    "flex bg-primary rounded-2xl flex-col items-center justify-center text-white px-6 gap-2 text-center";
+
   return (
-    <div className="adminDatas flex1">
-      <div className="div flex1">
+    <div className="grid grid-cols-2 rounded-2xl p-8 bg-white gap-4">
+      <div className={divStyle}>
         <h2>Number of Registered Users</h2>
         <h1>{numUsers}</h1>
       </div>
-      <div className="div flex1">
+      <div className={divStyle}>
         <h2>Number of Published Products</h2>
         <h1>{numProducts}</h1>
       </div>
-      <div className="div flex1">
+      <div className={divStyle}>
         <h2>Top Selling Products</h2>
-        <div className="divList flex1">{listProducts}</div>
+        <div className="flex flex-col gap-2">{listProducts}</div>
       </div>
-      <div className="div profits flex1">
+      <div className={divStyle}>
         <h2>Total Earnings</h2>
         <h3>({profitsPorcent}% of total revenue)</h3>
         <h1>{formatPrice(profits)}</h1>

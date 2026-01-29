@@ -1,8 +1,6 @@
 import { MdDeleteForever } from "react-icons/md";
-import axios from "axios";
 import Swal from "sweetalert2";
-
-const URI = import.meta.env.VITE_API_URL;
+import { api } from "../api/api";
 
 function ColumProducts({ product }) {
   const handleDeleteClick = async () => {
@@ -17,27 +15,32 @@ function ColumProducts({ product }) {
     });
 
     if (result.isConfirmed) {
-      await axios.delete(`${URI}/deleteProduct/${product.id}`);
+      await api.delete(`/deleteProduct/${product.id}`);
       window.location.reload();
     }
   };
 
   return (
-    <tr>
-      <td className="center">{product.id}</td>
-      <td>{product.name}</td>
+    <tr className="divide-x divide-gray-600">
+      <td className="px-4 py-2 text-center">{product.id}</td>
+      <td className="px-4">{product.name}</td>
       <td>
-        <img src={product.image} alt={product.name} />
+        <img
+          className="w-24 h-16 object-cover"
+          src={product.image}
+          alt={product.name}
+        />
       </td>
-      <td>{product.description}</td>
-      <td>{product.price}</td>
-      <td>{product.quantity}</td>
-      <td>{product.category_id}</td>
-      <td>{product.createdAt}</td>
-      <td>{product.updatedAt}</td>
-      <td className="center">
-        <button onClick={handleDeleteClick}>
-          <MdDeleteForever className="icon" />
+      <td className="px-4">{product.description}</td>
+      <td className="px-4">{product.price}</td>
+      <td className="px-4">{product.quantity}</td>
+      <td className="px-4">{product.category_id}</td>
+      <td className="px-4">
+        <button
+          onClick={handleDeleteClick}
+          className="text-red-600 hover:text-red-700"
+        >
+          <MdDeleteForever className="text-2xl" />
         </button>
       </td>
     </tr>

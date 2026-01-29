@@ -1,9 +1,8 @@
-import React from "react";
 import { Link } from "react-router-dom";
 
 function BtnAdmin(props) {
   return (
-    <Link className="flex1 btn" to={`/admin/${props.link}`}>
+    <Link className="btn-1" to={`/admin/${props.link}`}>
       <h2>{props.title}</h2>
       {props.icon}
     </Link>

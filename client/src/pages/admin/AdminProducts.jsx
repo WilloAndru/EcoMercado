@@ -1,15 +1,13 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import ColumProducts from "../../components/ColumProducts";
-
-const URL = import.meta.env.VITE_API_URL;
+import { api } from "../../api/api";
 
 function AdminProducts() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const res = await axios.get(`${URL}/products`);
+      const res = await api.get(`/products`);
       setProducts(res.data);
     };
     fetchUsers();
@@ -17,27 +15,28 @@ function AdminProducts() {
 
   const keys = Object.keys(products[0] || {});
 
-  const listUsers = products.map((product) => {
+  const listProducts = products.map((product) => {
     return <ColumProducts key={product.id} product={product} />;
   });
 
   return (
-    <table cellSpacing="0" className="adminUsers">
-      <thead>
-        <tr>
-          <th>{keys[0]}</th>
-          <th>{keys[1]}</th>
-          <th>{keys[2]}</th>
-          <th>{keys[3]}</th>
-          <th>{keys[4]}</th>
-          <th>{keys[5]}</th>
-          <th>{keys[6]}</th>
-          <th>{keys[7]}</th>
-          <th>Edit</th>
-          <th>Delete</th>
+    <table
+      cellSpacing="0"
+      className="-mt-20 -mx-[2vw] border border-gray-600 border-collapse"
+    >
+      <thead className="bg-primary text-white">
+        <tr className="divide-x divide-gray-600">
+          <th className="px-4 capitalize">{keys[0]}</th>
+          <th className="px-4 capitalize">{keys[1]}</th>
+          <th className="px-4 capitalize">{keys[2]}</th>
+          <th className="px-4 capitalize">{keys[3]}</th>
+          <th className="px-4 capitalize">{keys[4]}</th>
+          <th className="px-4 capitalize">{keys[5]}</th>
+          <th className="px-4 capitalize">{keys[6]}</th>
+          <th className="py-2 px-4">Delete</th>
         </tr>
       </thead>
-      <tbody>{listUsers}</tbody>
+      <tbody className="divide-y divide-gray-600">{listProducts}</tbody>
     </table>
   );
 }

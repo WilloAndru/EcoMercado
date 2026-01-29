@@ -2,10 +2,8 @@ import { useState, useEffect } from "react";
 import { MdDeleteForever } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { IoSaveOutline } from "react-icons/io5";
-import axios from "axios";
 import Swal from "sweetalert2";
-
-const URL = import.meta.env.VITE_API_URL;
+import { api } from "../api/api";
 
 function ColumUsers({ user }) {
   const [edit, setEdit] = useState(false);
@@ -21,7 +19,7 @@ function ColumUsers({ user }) {
 
   const handleSaveClick = async () => {
     setEdit(false);
-    await axios.post(`${URL}/users`, {
+    await api.post(`/users`, {
       email: user.email,
       role: role,
     });
@@ -39,41 +37,48 @@ function ColumUsers({ user }) {
     });
 
     if (result.isConfirmed) {
-      await axios.delete(`${URL}/users/${user.email}`);
+      await api.delete(`/users/${user.email}`);
       window.location.reload();
     }
   };
 
   return (
-    <tr>
-      <td className="center">{user.id}</td>
-      <td>
+    <tr className="divide-x divide-gray-600">
+      <td className="px-4 text-center w-15">{user.id}</td>
+      <td className="px-4 w-45">
         <select
           value={role}
           onChange={(e) => setRole(e.target.value)}
           disabled={!edit}
+          className="w-full rounded-md border border-gray-600 bg-white px-2 py-1 text-sm disabled:bg-gray-100"
         >
           <option value="admin">admin</option>
           <option value="client">client</option>
         </select>
       </td>
-      <td>{user.email}</td>
-      <td>{user.address}</td>
-      <td>{user.phone}</td>
-      <td>{user.createdAt}</td>
-      <td>{user.updatedAt}</td>
-      <td className="center">
-        <button onClick={edit ? handleSaveClick : handleEditClick}>
+      <td className="px-4 w-75 break-all">{user.email}</td>
+      <td className="px-4 w-60 break-all">{user.name}</td>
+      <td className="px-4 w-100 break-all">{user.picture}</td>
+      <td className="px-4 w-60 break-all">{user.addres}</td>
+      <td className="px-4 py-2 w-60 break-all">{user.phone}</td>
+      <td className="w-15 text-center">
+        <button
+          onClick={edit ? handleSaveClick : handleEditClick}
+          className="text-gray-600 hover:text-primary"
+        >
           {edit ? (
-            <IoSaveOutline className="icon" />
+            <IoSaveOutline className="text-2xl" />
           ) : (
-            <FaEdit className="icon" />
+            <FaEdit className="text-2xl" />
           )}
         </button>
       </td>
-      <td className="center">
-        <button onClick={handleDeleteClick}>
-          <MdDeleteForever className="icon" />
+      <td className="text-center w-15">
+        <button
+          onClick={handleDeleteClick}
+          className="text-red-600 hover:text-red-700"
+        >
+          <MdDeleteForever className="text-2xl" />
         </button>
       </td>
     </tr>

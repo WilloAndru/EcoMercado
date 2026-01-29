@@ -1,4 +1,9 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 @import "tailwindcss";
+
+* {
+  font-family: "Montserrat", sans-serif;
+}
 
 @theme {
   --color-primary: #49cb5c;
@@ -58,6 +63,14 @@ h5 {
 
 h6 {
   font-size: 1rem;
+}
+
+.showMessage {
+  @apply text-center py-4 px-8 bg-red-500 rounded-2xl text-white font-bold;
+}
+
+.hiddenMessage {
+  @apply hidden;
 }
 
 @keyframes slide-top {

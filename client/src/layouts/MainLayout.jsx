@@ -19,9 +19,14 @@ function MainLayout() {
   return (
     <div className="flex flex-col items-center bg-bg">
       <Header user={user} />
-      <main className="pt-45 pb-16 min-h-[88vh] w-full flex justify-center px-[2vw]">
+      <main
+        className={`pt-45 pb-20 w-full flex justify-center px-[2vw] ${
+          !isClient ? "min-h-screen" : "min-h-[88vh]"
+        }`}
+      >
         <Outlet />
       </main>
+
       {isClient && <Footer />}
     </div>
   );
