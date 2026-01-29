@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
 import SliderContainer from "../../components/SliderContainer";
 import { formatPrice } from "../../utils/formatPrice";
 import { useNavigate } from "react-router-dom";
@@ -8,8 +7,7 @@ import { dateToDay } from "../../utils/dateToDays";
 import { FaArrowRight } from "react-icons/fa";
 import { justNameUser } from "../../utils/justNameUser";
 import Swal from "sweetalert2";
-
-const URI = import.meta.env.VITE_API_URL;
+import { api } from "../../api/api";
 
 function ViewProduct() {
   const shoppingContext = JSON.parse(localStorage.getItem("shoppingContext"));
@@ -34,20 +32,20 @@ function ViewProduct() {
 
   useEffect(() => {
     const getProduct = async () => {
-      const res = await axios.get(`${URI}/product/${id}`);
+      const res = await api.get(`/product/${id}`);
       setProduct(res.data);
 
-      const resSeller = await axios.get(`${URI}/productSeller/${id}`);
+      const resSeller = await api.get(`/productSeller/${id}`);
       setSellerName(justNameUser(resSeller.data.userName));
       setSellerId(resSeller.data.user_id);
 
-      const resSuggest = await axios.get(`${URI}/products`);
+      const resSuggest = await api.get(`/products`);
       const filter = resSuggest.data.filter(
-        (p) => p.category_id === res.data.category_id
+        (p) => p.category_id === res.data.category_id,
       );
       setSimilarProducts(filter);
 
-      const resUser = await axios.get(`${URI}/getUserDatas`, {
+      const resUser = await api.get(`/getUserDatas`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -84,7 +82,7 @@ function ViewProduct() {
           name: product.name,
           price: product.price,
           quantity: 1,
-        })
+        }),
       );
       navigate("/buyProduct/product");
     } else {
@@ -103,7 +101,7 @@ function ViewProduct() {
           name: product.name,
           price: product.price,
           quantity: units,
-        })
+        }),
       );
       navigate("/buyProduct/product");
     } else {
@@ -121,38 +119,43 @@ function ViewProduct() {
   };
 
   return (
-    <div className="viewProduct page flex1">
-      <div className="viewProduct1 flex1">
-        <img src={product.image} alt={product.name} />
+    <div className="flex flex-col gap-4 items-center w-full -mt-10">
+      <div className="p-5 bg-white rounded-xl gap-8 w-[81vw] flex">
+        <img
+          className="h-[50vh] object-cover w-1/2 rounded-xl"
+          src={product.image}
+          alt={product.name}
+        />
 
-        <div className="productInfo flex1">
+        <div className="flex flex-col gap-2 items-start justify-center">
           <h1>{product.name}</h1>
-
           <h1>{formatPrice(product.price)}</h1>
-
           <p>{product.description}</p>
-
-          <div className="flex1">
-            <button className="btn" onClick={() => verifyUser(true)}>
+          <div className="flex gap-2">
+            <button className="btn-1" onClick={() => verifyUser(true)}>
               Buy now
             </button>
             {!isOnCart && product.quantity !== 1 && (
-              <button className="btn" onClick={() => verifyUser(false)}>
+              <button className="btn-1" onClick={() => verifyUser(false)}>
                 Add to cart
               </button>
             )}
           </div>
 
           {showQuantity && (
-            <div className="showQuantity">
+            <div className="flex flex-col items-start gap-2">
               <p>
                 How many units would you like to{" "}
                 {isBuyNow ? "buy" : "add to cart"}?
               </p>
 
-              <form onSubmit={handleSubmit}>
+              <form
+                className="flex rounded-2xl overflow-hidden border"
+                onSubmit={handleSubmit}
+              >
                 <input
                   type="number"
+                  className="w-[12vw]"
                   min="1"
                   max={`${product.quantity}`}
                   placeholder={`Up to ${product.quantity} units`}
@@ -160,7 +163,7 @@ function ViewProduct() {
                   onChange={() => setUnits(event.target.value)}
                   required
                 />
-                <button type="submit">
+                <button className="btn-1 h-full" type="submit">
                   <FaArrowRight />
                 </button>
               </form>

@@ -1,10 +1,8 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { formatPrice } from "../../utils/formatPrice";
 import { validateCreditCard } from "../../utils/validateCreditCard";
-
-const URI = import.meta.env.VITE_API_URL;
+import { api } from "../../api/api";
 
 function BuyProduct() {
   const { type } = useParams();
@@ -24,18 +22,6 @@ function BuyProduct() {
     });
     setTotalPrice(totalPriceVar);
   }, []);
-
-  const listProducts = products.map((product, i) => {
-    return (
-      <tr key={i}>
-        <td>
-          {product.name}
-          {product.quantity > 1 ? `${product.quantity} unidades` : ""}
-        </td>
-        <td>{formatPrice(product.price * product.quantity)}</td>
-      </tr>
-    );
-  });
 
   const handleCardNumberChange = (e) => {
     const input = e.target.value.replace(/\s+/g, "").slice(0, 16);
@@ -66,8 +52,8 @@ function BuyProduct() {
       setError(validationMessage);
     } else {
       const handleCreateIncome = async () => {
-        const res = await axios.post(
-          `${URI}/createIncome`,
+        const res = await api.post(
+          `/createIncome`,
           {
             products: products.map((p) => ({
               product_id: p.id,
@@ -93,17 +79,22 @@ function BuyProduct() {
     }
   };
 
+  const trStyle = "flex justify-between gap-8 p-4 pb-0";
+
   return (
-    <div className="buyProduct page flex1">
-      <div className="flex1 leftConteiner ">
+    <div className="flex gap-8 justify-center items-start">
+      <div className="flex flex-col">
         <span className={error ? "showMessage" : "hiddenMessage"}>{error}</span>
 
-        <form onSubmit={handleSuccessBuy}>
-          <label>Card information</label>
-          <div className="inputConteiner">
+        <form
+          className="bg-white p-4 rounded-2xl flex flex-col gap-4 justify-center"
+          onSubmit={handleSuccessBuy}
+        >
+          <h6>Card information</h6>
+          <div className="overflow-hidden border border-gray-500 rounded-xl">
             <input
               name="cardNumber"
-              className="Input input1"
+              className="w-full p-2 border-b border-gray-500"
               value={cardNumber}
               type="text"
               placeholder="1234 1234 1234 1234"
@@ -116,47 +107,56 @@ function BuyProduct() {
                 onChange={handleExpiryDateChange}
                 type="text"
                 placeholder="MM/AA"
+                className="p-2"
               />
               <input
                 name="cvv"
-                className="input2"
+                className="w-1/2 p-2 border-l border-gray-500"
                 type="text"
                 placeholder="CVV"
               />
             </div>
           </div>
 
-          <label>Owner's name</label>
-          <div className="inputConteiner">
+          <h6>Owner's name</h6>
+          <div className="overflow-hidden border rounded-xl border-gray-500">
             <input
               name="cardHolderName"
-              className="Input"
+              className="w-full"
               type="text"
               placeholder="Full name"
             />
           </div>
 
-          <button className="btn" type="submit">
+          <button className="btn-1" type="submit">
             Buy
           </button>
         </form>
       </div>
 
-      <table>
+      <table className="bg-white rounded-xl">
         <thead>
-          <tr>
+          <tr className={trStyle}>
             <th>Items</th>
             <th>Price</th>
           </tr>
         </thead>
 
         <tbody>
-          {listProducts}
-          <tr>
+          {products.map((product, i) => (
+            <tr className={trStyle} key={i}>
+              <td>
+                {product.name}
+                {product.quantity > 1 ? `${product.quantity} unidades` : ""}
+              </td>
+              <td>{formatPrice(product.price * product.quantity)}</td>
+            </tr>
+          ))}
+          <tr className={trStyle}>
             <td>Shipping cost (10% of item cost)</td>
             <td>{formatPrice(totalPrice * 0.1)}</td>
           </tr>
-          <tr>
+          <tr className={`${trStyle} pb-4`}>
             <th>Total to pay</th>
             <th>{formatPrice(totalPrice * 1.1)}</th>
           </tr>
