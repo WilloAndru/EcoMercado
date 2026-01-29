@@ -32,7 +32,6 @@ function ProfileSales() {
           )[0].quantity;
           total += qty * p.price;
         });
-        console.log(total);
         setTotalRevenue(total);
       } catch (error) {
         alert("Something went wrong while getting sold products.");

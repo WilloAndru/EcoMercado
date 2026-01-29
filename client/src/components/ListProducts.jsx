@@ -39,12 +39,6 @@ function ListProducts({ mode, listProducts, listTransactions }) {
     }
   };
 
-  const setStatePurchases = (id) => {
-    let transaction = listTransactions.filter((t) => t.product_id === id);
-    transaction = transaction[0].createdAt;
-    return arrivalDays(transaction);
-  };
-
   const ListProducts = listProducts
     .slice((currentPage - 1) * productsForPage, currentPage * productsForPage)
     .map((p) => {
@@ -63,25 +57,10 @@ function ListProducts({ mode, listProducts, listTransactions }) {
               {mode === "shoppingCart" && (
                 <h3>{formatPrice(p.price * filterQuantity(p.id))}</h3>
               )}
-              {mode === "purchases" && (
-                <h3>
-                  Total Paid:{" "}
-                  {formatPrice(1.1 * p.price * filterQuantity(p.id))}
-                </h3>
-              )}
-              {mode === "sold" && (
-                <h3>Revenue: {formatPrice(p.price * filterQuantity(p.id))}</h3>
-              )}
 
               {mode === "shoppingCart" && (
                 <h4>Units: {filterQuantity(p.id)}</h4>
               )}
-              {mode === "purchases" && (
-                <h4>Units Purchased: {filterQuantity(p.id)}</h4>
-              )}
-              {mode === "sold" && <h4>Units Sold: {filterQuantity(p.id)}</h4>}
-
-              {mode === "purchases" && <h4>{setStatePurchases(p.id)}</h4>}
             </div>
           </div>
 
@@ -92,16 +71,6 @@ function ListProducts({ mode, listProducts, listTransactions }) {
                 onClick={() => deleteProductShoppingCart(p.id)}
               >
                 Remove
-              </button>
-            )}
-            {mode === "sales" && (
-              <button onClick={() => navigate(`/publishProduct/${p.id}`)}>
-                Edit
-              </button>
-            )}
-            {mode === "sales" && (
-              <button className="red" onClick={() => deleteProduct(p.id)}>
-                Delete
               </button>
             )}
           </div>

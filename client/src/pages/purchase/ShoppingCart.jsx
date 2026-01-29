@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
-import ListProducts from "../../components/ListProducts";
 import { useNavigate } from "react-router-dom";
-
-const URI = import.meta.env.VITE_API_URL;
+import { api } from "../../api/api";
+import { formatPrice } from "../../utils/formatPrice";
 
 function ShoppingCart() {
   const shoppingContext = JSON.parse(localStorage.getItem("shoppingContext"));
@@ -12,10 +10,12 @@ function ShoppingCart() {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const ids = shoppingContext.map((i) => i.id);
-      const res = await axios.post(`${URI}/shoppingCart`, { ids });
-      if (res.status === 200) {
+      try {
+        const ids = shoppingContext.map((i) => i.id);
+        const res = await api.post("/shoppingCart", { ids });
         setProducts(res.data);
+      } catch (error) {
+        alert("Something went wrong while getting products on shoppping cart.");
       }
     };
     fetchProducts();
@@ -27,21 +27,33 @@ function ShoppingCart() {
   };
 
   return (
-    <div className="shoppingCart page flex1">
+    <div className="flex flex-col gap-4 md:w-2/3 max-w-180 items-center justify-center">
       <h1>Cart items</h1>
-
-      <ListProducts mode="shoppingCart" listProducts={products} />
-
-      <div className="flex1 div1">
-        <button className="btn" onClick={cleanContext}>
-          Empty Cart
-        </button>
-        <button
-          className="btn"
-          onClick={() => navigate("/buyProduct/products")}
-        >
-          Checkout
-        </button>
+      <div className="flex flex-col p-4 rounded-xl bg-white gap-4">
+        {products.map((p, i) => (
+          <div key={i} className="flex items-center gap-6">
+            <img
+              className="w-60 max-h-40 rounded-xl object-cover"
+              src={p.image}
+              alt="img"
+            />
+            <div className="flex flex-col gap-2">
+              <h2>{p.name}</h2>
+              <h4>{formatPrice(p.price)}</h4>
+            </div>
+          </div>
+        ))}
+        <div className="flex gap-4">
+          <button className="btn-red w-full" onClick={cleanContext}>
+            Empty Cart
+          </button>
+          <button
+            className="btn-1 w-full"
+            onClick={() => navigate("/buyProduct/products")}
+          >
+            Checkout
+          </button>
+        </div>
       </div>
     </div>
   );
