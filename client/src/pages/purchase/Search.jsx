@@ -20,16 +20,17 @@ function Search() {
   useEffect(() => {
     const getProducts = async () => {
       const res = await api.get(`/products`);
-      if (valueName) {
+      if (idCategory) {
+        const filter = res.data.filter((p) => p.category_id === idCategory);
+        setSelectedCategory(idCategory);
+        setProducts(res.data);
+        setProductsFilter(filter);
+        return;
+      } else if (valueName) {
         const filter = res.data.filter((p) =>
           p.name.toLowerCase().includes(valueName),
         );
         setProducts(filter);
-        setProductsFilter(filter);
-      } else if (idCategory) {
-        const filter = res.data.filter((p) => p.category_id === idCategory);
-        setSelectedCategory(idCategory);
-        setProducts(res.data);
         setProductsFilter(filter);
       }
     };

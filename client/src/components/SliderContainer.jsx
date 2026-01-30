@@ -82,6 +82,7 @@ function SliderContainer(props) {
                   props.className === "category"
                     ? () => {
                         localStorage.setItem("idCategory", e.id);
+                        localStorage.removeItem("valueInput");
                         navigate("/search");
                       }
                     : () => navigate(`/product/${e.id}`)

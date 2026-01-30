@@ -14,12 +14,12 @@ function Header({ user }) {
   const navigate = useNavigate();
 
   // Cuando se le da click a buscar
-  const goSearchInterface = async (e) => {
-    e.preventDefault();
+  const goSearchInterface = async () => {
     query
       ? localStorage.setItem("valueInput", query)
       : localStorage.removeItem("valueInput");
     if (query || localStorage.getItem("valueInput")) {
+      localStorage.removeItem("idCategory");
       setResults([]);
       navigate("/search");
     }
@@ -56,7 +56,6 @@ function Header({ user }) {
               onChange={(e) => onChange(e.target.value)}
               className="w-50 md:w-70 bg-bg"
             />
-
             <button
               type="submit"
               className="px-5 py-3 text-white hover:bg-hover"
