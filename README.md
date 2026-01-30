@@ -17,14 +17,26 @@ Este proyecto marcó mi primer paso en desarrollo web full stack. Inicialmente d
 - Autenticación segura de usuario usando google OAuth 2.0
   ![Logo](./images/2.png)
 - Búsqueda avanzada con filtrado y paginación de productos
+  ![Logo](./images/3.png)
 - Carrito de compras funcional
+  ![Logo](./images/4.png)
 - Modulo de pagos simulado
+  ![Logo](./images/5.png)
 - CRUD de productos para vendedores
+  ![Logo](./images/6.png)
+- Detalle y compra de productos
+  ![Logo](./images/7.png)
 - Panel administrativo
-- Catálogo de productos sostenibles
-- Opciones de perfil
+  ![Logo](./images/8.png)
 
-## Capturas de pantalla
+## Aprendizajes
+
+- Implementación de OAuth 2.0
+- Diseño de interfaces responsive con Tailwind CSS
+- Manejo de JWT y protección de rutas
+- Manejo de estados globales
+- Diseño de CRUD con roles
+- Integración frontend-backend
 
 ## Tecnologías
 
@@ -33,8 +45,10 @@ Este proyecto marcó mi primer paso en desarrollo web full stack. Inicialmente d
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-3.0-06B6D4)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-14-336791)
 
-## Instalación Local (Opcional)
+## Instalación Local
 
 ```bash
 git clone https://github.com/WilloAndru/EcoMercado.git
+npm install
+npm run dev
 ```

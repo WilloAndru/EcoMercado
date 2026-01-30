@@ -66,7 +66,7 @@ function ProfilePurchases() {
       ) : (
         <div className="flex flex-col items-center gap-6 text-gray-400">
           <RiPlantLine className="text-8xl" />
-          <h1>No products have been purchased from you yet</h1>
+          <h1>You haven’t purchased any products yet</h1>
         </div>
       )}
     </div>
